@@ -1,6 +1,3 @@
-//página de login: inpu email e senha, botão de login,
-//botão google e link para cadastro
-
 import Button from '../components/button.js';
 import Input from '../components/input.js';
 
@@ -15,7 +12,6 @@ function loginUser() {
 }
 
 function Login() {
-  // const template = "<h1>Horta Urbana</h1> <form>" + Input({ type: 'email', class: 'email-input', placeholder: 'Email' }) + Input({ type: 'password', class: 'password-input', placeholder: 'Senha' }) + Button({ id: 'btn-log-in', onclick: loginUser, title: 'Login' }) + "<button class='btn btn-lg btn-danger' id='authGoogleButton'><i class='fa fa-google fa-2x'></i></button></form><p>Ainda é membro? <a href='#'>cadastre-se</a></p>";
   const userLogin = `
   ${Input({
     type: 'email',
@@ -29,6 +25,7 @@ function Login() {
   })}
   ${Button({
     id: 'btn-log-in',
+    class: 'btn',
     onclick: loginUser,
     title: 'Login',
   })}
@@ -40,10 +37,11 @@ function Login() {
   })}
   `;
   const template = `
-  <h1>Horta Urbana</h1> 
-  <form>
+  <img src="./img/pluto-floral-and-botanical-growth.png">
+  <form class="form-content">
+  <h1>Horta Urbana</h1>
   ${userLogin}
-  <p>Ainda é membro? <a href='#'>Cadastre-se</a></p>
+  <p>Ainda não é membro?<a href='#'> Cadastre-se!</a></p>
   </form>
   `;
   return template;
