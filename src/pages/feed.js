@@ -163,7 +163,7 @@ function save() {
 function cancel() {
   const id = event.target.dataset.id;
   const postText = document.getElementById(id).querySelector('.post-text');
-  const text = postText.textContent;
+  const text = postText.textContent.trim();
   postText.innerHTML = `
   <p class='post-text'>${text}</p>
   `;
@@ -253,58 +253,58 @@ function loadPosts() {
 
 function Feed() {
   const template = `
-  <header class='header'>
-    ${Button({
+      <header class='header'>
+        ${Button({
     type: 'button',
     class: 'btn profile-btn hide-mobile',
     id: 'btn-profile',
     onclick: () => window.location = '#profile',
     title: 'Meu Perfil',
   })}
-    <div class='header-title'>
-      <label for='toggle-side-menu'>
-        <div class='fa fa-bars hide-desktop menu-icon'></div>
-      </label>
-      <p> Horta Urbana </p> 
-      <div class='header-img'>
-        <img src="./img/cenoura.png">
-      </div>
-    </div>
-    ${Button({
+        <div class='header-title'>
+          <label for='toggle-side-menu'>
+            <div class='fa fa-bars hide-desktop menu-icon'></div>
+          </label>
+          <p> Horta Urbana </p> 
+          <div class='header-img'>
+            <img src="./img/cenoura.png">
+          </div>
+        </div>
+        ${Button({
     type: 'button',
     class: 'btn logout-btn hide-mobile',
     id: 'btn-log-out',
     onclick: logOut,
     title: 'Sair',
   })}
-    <input 
-      type='checkbox'
-      id='toggle-side-menu' 
-      class='toggle-side-menu hide-desktop'
-    />
-    <div class='side-menu hide-desktop'>
-        ${Button({
+      <input 
+        type='checkbox'
+        id='toggle-side-menu' 
+        class='toggle-side-menu hide-desktop'
+      />
+        <div class='side-menu hide-desktop'>
+            ${Button({
     type: 'button',
     class: 'btn profile-btn ',
     id: 'btn-profile',
     onclick: () => window.location = '#profile',
     title: 'Meu Perfil',
   })}
-        ${Button({
+            ${Button({
     type: 'button',
     class: 'btn logout-btn ',
     id: 'btn-log-out',
     onclick: logOut,
     title: 'Sair',
   })}
-    </div>
-  </header>
-  <div class='profile'>${userInfo()}</div>
-    ${NewPostTemplate()}
-    <section id="printpost" class="print-post">
-      <ul class='post-list'>${loadPosts()}</ul>
-    </section>
-  `;
+        </div>
+      </header>
+      <div class='profile'>${userInfo()}</div>
+      ${NewPostTemplate()}
+      <section id="printpost" class="print-post">
+        <ul class='post-list'>${loadPosts()}</ul>
+      </section>
+      `;
   return template;
 }
 

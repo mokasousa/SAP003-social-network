@@ -3,8 +3,6 @@ import Signup from './pages/signup.js';
 import Feed from './pages/feed.js';
 import Profile from './pages/profile.js';
 
-
-
 function locationHashChanged() {
   firebase.auth().onAuthStateChanged((user) => {
     if (user) {
