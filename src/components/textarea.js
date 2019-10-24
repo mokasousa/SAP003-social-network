@@ -5,4 +5,7 @@ function Textarea(props) {
   return template;
 }
 
+window.textarea = {
+  component: Textarea,
+}
 export default Textarea;

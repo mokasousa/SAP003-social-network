@@ -1,4 +1,5 @@
 import Button from '../components/button.js';
+import Textarea from '../components/textarea.js';
 
 function logOut() {
   auth
@@ -12,16 +13,102 @@ function userInfo() {
   const user = auth.currentUser;
   db.collection('users').doc(user.uid).get().then((doc) => {
     const username = `
-    <h4>${doc.data().name}!</h4>
-    `;
-    document.querySelector('.profile').innerHTML = username;
+  <h2>${doc.data().name}</h2>
+  `;
+    document.querySelector('.profile').innerHTML = username.toUpperCase();
   });
+}
+
+function addBio() {
+  const user = auth.currentUser;
+  db.collection('users').doc(user.uid).get().then((doc) => {
+    const userBiography = `
+    <p class="text-bio">${doc.data().biography}</p>
+    `;
+    document.querySelector('.user-bio').innerHTML = userBiography;
+  });
+}
+
+function saveEditBio() {
+  const user = auth.currentUser;
+  const id = db.collection('users').doc(user.uid);
+  console.log(id);
+  const bioText = document.querySelector('.text-bio');
+  const saveEdit = document.querySelector('.edit-textarea').value;
+  bioText.innerHTML = `
+  <p class='text-bio'>${saveEdit}</p>
+  `;
+  firebase.firestore().collection('users').doc(user.uid).update({
+    biography: saveEdit,
+  });
+  document.querySelector('.edit-button').innerHTML = '';
+}
+
+function cancel() {
+  const user = auth.currentUser;
+  const id = db.collection('users').doc(user.uid).get().then((doc) => {
+    const originalText = `
+        <p class='text-bio'>${doc.data().biography}</p>
+    `;
+    document.querySelector('.user-bio').innerHTML = originalText;
+  });
+}
+
+function editBio() {
+  const userId = firebase.auth().currentUser.uid;
+  console.log(userId);
+  const user = auth.currentUser;
+  db.collection('users').doc(user.uid);
+  // const userName = user.displayName;
+  // console.log(userName);
+  const userName = document.querySelector('.profile');
+  const userNameText = userName.textContent;
+  console.log(userNameText);
+  const bioText = document.querySelector('.text-bio');
+  // const button = document.querySelector('.edit-button');
+  const text = bioText.textContent;
+  console.log(text);
+  bioText.innerHTML = `
+    <form>
+      ${window.textarea.component({
+    class: 'edit-textarea',
+    id: 'edit-textarea',
+    placeholder: 'Fale de você, seus gostos, plantas favoritas, etc.',
+    value: text,
+  })}
+  </form>
+  ${window.button.component({
+    id: 'btn-save',
+    class: 'btn save-btn',
+    onclick: profile.saveEditBio,
+    title: 'Salvar',
+  })}
+      ${window.button.component({
+    id: 'btn-cancel',
+    class: 'btn cancel-btn',
+    onclick: profile.cancel,
+    title: 'Cancelar',
+  })}
+  `;
+}
+
+function createBio() {
+  const template = `
+  ${Button({
+    type: 'button',
+    class: 'btn btn-gray btn-post',
+    id: 'btn-post',
+    onclick: editBio,
+    title: 'Editar biografia',
+  })}
+  `;
+  return template;
 }
 
 function Profile() {
   const template = `
   <header class='header'>
-    ${Button({
+      ${Button({
     type: 'button',
     class: 'btn profile-btn hide-mobile',
     id: 'btn-profile',
@@ -32,7 +119,7 @@ function Profile() {
       <label for='toggle-side-menu'>
         <div class='fa fa-bars hide-desktop menu-icon'></div>
       </label>
-      <p> Horta Urbana </p> 
+      <p> Horta Urbana </p>
       <div class='header-img'>
         <img src="./img/cenoura.png">
       </div>
@@ -44,15 +131,15 @@ function Profile() {
     onclick: logOut,
     title: 'Sair',
   })}
-    <input 
+    <input
       type='checkbox'
-      id='toggle-side-menu' 
+      id='toggle-side-menu'
       class='toggle-side-menu hide-desktop'
     />
     <div class='side-menu hide-desktop'>
       ${Button({
     type: 'button',
-    class: 'btn profile-btn ',
+    class: 'btn profile-btn',
     id: 'btn-profile',
     onclick: () => window.location = '#feed',
     title: 'Mural',
@@ -66,26 +153,31 @@ function Profile() {
   })}
     </div>
   </header>
+  <main class='user-profile'>
     <div class='profile'>${userInfo()}</div>
-    <section id="printpost" class="print-post">
-      <ul class='post-list'></ul>
+    <section class='user-bio'>
+      ${addBio()}
     </section>
+    ${createBio()}
+    <div class="edit-button"></div>
+  </main>
+  <section id="printpost" class="print-post">
+    <ul class='post-list'></ul>
+  </section>
 `;
   return template;
 }
 
 export default Profile;
 
+window.profile = {
+  saveEditBio,
+  cancel,
+}
 
-// function Profile(props) {
-//   const templateProfile = `
-//   <div class='srdosaneis'> ${postListProfile(props)}</div>
-//   `;
-//   return templateProfile;
-// }
 
-// function postListProfile(props) {
-//   props.posts.forEach((element) => {
-//     console.log(element.data().text);
-//   });
-// }
+
+
+
+// <textarea class= 'edit-textarea' id= 'edit-textarea' placeholder= 'Fale de você, seus gostos, plantas favoritas, etc.'>text</textarea>
+//   <button id= 'btn-save' onclick= saveEditBio title= 'Salvar'></button>

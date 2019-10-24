@@ -9,12 +9,12 @@ function newUser() {
     .then((resp) => {
       if (resp.user) {
         resp.user.updateProfile({
-          displayName: name
+          displayName: name,
         })
           .then(() => {
             db.collection('users').doc(resp.user.uid).set({
               name: name,
-              likes: []
+              biography: 'Fale de você, seus gostos, plantas favoritas, etc.',
             })
               .then(() => {
                 window.location = '#login';

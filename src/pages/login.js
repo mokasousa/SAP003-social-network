@@ -22,16 +22,19 @@ function signInWithAccount(provider) {
   firebase.auth()
     .signInWithPopup(provider)
     .then((result) => {
-      // if (result.credential) {
-      //   const token = result.credential.accessToken;
-      // };
       const user = result.user;
-      db.collection('users').doc(user.uid).set({
-        name: user.displayName,
+      console.log(user.uid);
+      db.collection('users').doc(user.uid).get().then((doc) => {
+        if (doc.data()) {
+          location.hash = '#feed';
+        } else {
+          db.collection('users').doc(user.uid).set({
+            name: user.displayName,
+            biography: 'Fale de você, seus gostos, plantas favoritas, etc.',
+          });
+          location.hash = '#feed';
+        }
       });
-      if (result) {
-        location.hash = '#feed';
-      }
     }).catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;

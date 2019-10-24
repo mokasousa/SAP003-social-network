@@ -97,6 +97,7 @@ function addComment(postId) {
     ${Textarea({
     class: 'textarea-comment',
     placeholder: 'Escreva um comentário',
+    value: '',
   })}
     ${Button({
     type: 'button',
