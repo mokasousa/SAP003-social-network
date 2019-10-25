@@ -44,9 +44,9 @@ function saveEditBio() {
   document.querySelector('.edit-button').innerHTML = '';
 }
 
-function cancel() {
+function cancelEditBio() {
   const user = auth.currentUser;
-  const id = db.collection('users').doc(user.uid).get().then((doc) => {
+  db.collection('users').doc(user.uid).get().then((doc) => {
     const originalText = `
         <p class='text-bio'>${doc.data().biography}</p>
     `;
@@ -61,19 +61,18 @@ function editBio() {
   db.collection('users').doc(user.uid);
   // const userName = user.displayName;
   // console.log(userName);
-  const userName = document.querySelector('.profile');
-  const userNameText = userName.textContent;
-  console.log(userNameText);
+  // console.log(userNameText);
+  // console.log(text);
+  // const userName = document.querySelector('.profile');
+  // const userNameText = userName.textContent;
   const bioText = document.querySelector('.text-bio');
-  // const button = document.querySelector('.edit-button');
   const text = bioText.textContent;
-  console.log(text);
   bioText.innerHTML = `
     <form>
       ${window.textarea.component({
     class: 'edit-textarea',
     id: 'edit-textarea',
-    placeholder: 'Fale de você, seus gostos, plantas favoritas, etc.',
+    placeholder: 'Fale de você, seus gostos, plantas favoritas, etc. fa fa-comments',
     value: text,
   })}
   </form>
@@ -86,7 +85,7 @@ function editBio() {
       ${window.button.component({
     id: 'btn-cancel',
     class: 'btn cancel-btn',
-    onclick: profile.cancel,
+    onclick: profile.cancelEditBio,
     title: 'Cancelar',
   })}
   `;
@@ -172,7 +171,7 @@ export default Profile;
 
 window.profile = {
   saveEditBio,
-  cancel,
+  cancelEditBio,
 }
 
 

@@ -23,7 +23,6 @@ function signInWithAccount(provider) {
     .signInWithPopup(provider)
     .then((result) => {
       const user = result.user;
-      console.log(user.uid);
       db.collection('users').doc(user.uid).get().then((doc) => {
         if (doc.data()) {
           location.hash = '#feed';
