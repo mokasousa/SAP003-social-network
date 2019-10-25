@@ -1,14 +1,14 @@
 import Button from '../components/button.js';
 
-function logOut() {
-  auth
-    .signOut()
-    .then(() => {
-      window.location = '#login';
-    });
-}
+// function logOut() {
+//   auth
+//     .signOut()
+//     .then(() => {
+//       window.location = '#login';
+//     });
+// }
 
-function userInfo() {
+function UserInfo() {
   const user = auth.currentUser;
   db.collection('users').doc(user.uid).get().then((doc) => {
     const username = `
@@ -18,7 +18,7 @@ function userInfo() {
   });
 }
 
-function addBio() {
+function AddBio() {
   const user = auth.currentUser;
   db.collection('users').doc(user.uid).get().then((doc) => {
     const userBiography = `
@@ -78,7 +78,7 @@ function editBio() {
   `;
 }
 
-function createBio() {
+function CreateBio() {
   const template = `
   ${Button({
     type: 'button',
@@ -91,69 +91,76 @@ function createBio() {
   return template;
 }
 
-function Profile() {
-  const template = `
-  <header class='header'>
-      ${Button({
-    type: 'button',
-    class: 'btn profile-btn hide-mobile',
-    id: 'btn-profile',
-    onclick: () => window.location = '#feed',
-    title: 'Mural',
-  })}
-    <div class='header-title'>
-      <label for='toggle-side-menu'>
-        <div class='fa fa-bars hide-desktop menu-icon'></div>
-      </label>
-      <p> Horta Urbana </p>
-      <div class='header-img'>
-        <img src="./img/cenoura.png">
-      </div>
-    </div>
-    ${Button({
-    type: 'button',
-    class: 'btn logout-btn hide-mobile',
-    id: 'btn-log-out',
-    onclick: logOut,
-    title: 'Sair',
-  })}
-    <input
-      type='checkbox'
-      id='toggle-side-menu'
-      class='toggle-side-menu hide-desktop'
-    />
-    <div class='side-menu hide-desktop'>
-      ${Button({
-    type: 'button',
-    class: 'btn profile-btn',
-    id: 'btn-profile',
-    onclick: () => window.location = '#feed',
-    title: 'Mural',
-  })}
-      ${Button({
-    type: 'button',
-    class: 'btn logout-btn ',
-    id: 'btn-log-out',
-    onclick: logOut,
-    title: 'Sair',
-  })}
-    </div>
-  </header>
-  <main class='user-profile'>
-    <div class='profile-name'> 
-    ${userInfo()} 
-    </div>
-    <section class='user-bio'>
-      ${addBio()}
-    </section>
-    ${createBio()}
-    <div class="edit-button"></div>
-  </main>
-`;
-  return template;
-}
+export {
+  UserInfo,
+  AddBio,
+  CreateBio,
+};
 
-export default Profile;
+
+// function Profile() {
+//   const template = `
+//   <header class='header'>
+//       ${Button({
+//     type: 'button',
+//     class: 'btn profile-btn hide-mobile',
+//     id: 'btn-profile',
+//     onclick: () => window.location = '#feed',
+//     title: 'Mural',
+//   })}
+//     <div class='header-title'>
+//       <label for='toggle-side-menu'>
+//         <div class='fa fa-bars hide-desktop menu-icon'></div>
+//       </label>
+//       <p> Horta Urbana </p>
+//       <div class='header-img'>
+//         <img src="./img/cenoura.png">
+//       </div>
+//     </div>
+//     ${Button({
+//     type: 'button',
+//     class: 'btn logout-btn hide-mobile',
+//     id: 'btn-log-out',
+//     onclick: logOut,
+//     title: 'Sair',
+//   })}
+//     <input
+//       type='checkbox'
+//       id='toggle-side-menu'
+//       class='toggle-side-menu hide-desktop'
+//     />
+//     <div class='side-menu hide-desktop'>
+//       ${Button({
+//     type: 'button',
+//     class: 'btn profile-btn',
+//     id: 'btn-profile',
+//     onclick: () => window.location = '#feed',
+//     title: 'Mural',
+//   })}
+//       ${Button({
+//     type: 'button',
+//     class: 'btn logout-btn ',
+//     id: 'btn-log-out',
+//     onclick: logOut,
+//     title: 'Sair',
+//   })}
+//     </div>
+//   </header>
+//   <section class='user-profile'>
+//     <div class='profile-name'> 
+//     ${UserInfo()} 
+//     </div>
+//     <section class='user-bio'>
+//       ${AddBio()}
+//     </section>
+//     ${CreateBio()}
+//     <div class="edit-button"></div>
+//   </section>
+// `;
+//   return template;
+// }
+
+// export default Profile;
 
 window.profile = {
   saveEditBio,

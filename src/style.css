@@ -290,6 +290,7 @@ transition: all .4s linear;
   padding: 5px;
   resize: none;
 }
+/*Até aqui*/
 
 @media only screen and (min-width: 576px){
 
@@ -332,6 +333,7 @@ transition: all .4s linear;
   }
 }
 
+/*Verificar*/
 @media only screen and (min-width: 768px){
   .user-profile {
   }
