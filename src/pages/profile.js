@@ -12,7 +12,7 @@ function userInfo() {
   const user = auth.currentUser;
   db.collection('users').doc(user.uid).get().then((doc) => {
     const username = `
-  <h2>${doc.data().name}</h2>
+  ${doc.data().name}
   `;
     document.querySelector('.profile-name').innerHTML = username.toUpperCase();
   });
@@ -77,29 +77,6 @@ function editBio() {
   })}
   `;
 }
-
-function editName() {
-  const user = auth.currentUser;
-  console.log(user);
-  // const id = db.collection('users').doc(user.uid);
-  // console.log(id);
-  const userId = firebase.auth().currentUser.uid;
-  console.log(userId);
-  const userName = user.displayName;
-  console.log(userName);
-  //
-  // userName.innerHTML = `
-  // <form>
-  //   ${window.input.component({
-  //   type: 'text',
-  //   class: 'name-input',
-  //   placeholder: 'Nome',
-  //   value: userName,
-  // })}
-  // </form>
-  // `;
-}
-
 
 function createBio() {
   const template = `
@@ -186,62 +163,3 @@ window.profile = {
   saveEditBio,
   cancelEditBio,
 };
-
-//entre l 168 e 169     <span class="edit-post fa fa-pencil"></span>
-
-//FUNÇÃO PARA EDITAR NOME
-
-// function editName() {
-//   const user = auth.currentUser;
-//   const userName = db.collection('users').doc(user.uid).get().then((doc) => {
-//     return doc.data().name;
-//   });
-//   console.log(userName);
-// }
-
-// function editName() {
-//   // const id = db.collection('users').doc(user.uid);
-//   // const userId = firebase.auth().currentUser.uid;
-//   const user = auth.currentUser;
-//   // db.collection('users').doc(user.uid);
-//   const userName = user.displayName;
-//   console.log(userName);
-//   const nameText = document.querySelector('.text-bio');
-//   const text = nameText.textContent;
-//   nameText.innerHTML = `
-//     <form>
-//     userName.innerHTML = `
-//     ${window.input.component({
-//     type: 'text',
-//     class: 'name-input',
-//     placeholder: 'Nome',
-//     value: userName,
-//   })}
-//    </form>
-//    `;
-//   </form>
-//   ${window.button.component({
-//     id: 'btn-save',
-//     class: 'btn save-btn',
-//     onclick: profile.saveEditBio,
-//     title: 'Publicar',
-//   })}
-//       ${window.button.component({
-//     id: 'btn-cancel',
-//     class: 'btn cancel-btn',
-//     onclick: profile.cancelEditBio,
-//     title: 'Cancelar',
-//   })}
-//   `;
-// }
-
-
-// document.querySelectorAll('.edit-post').forEach((btn) => {
-//   btn.addEventListener('click', (event) => {
-//     editPost(event.target.parentNode.parentNode.getAttribute('id'));
-
-
-// firebase.firestore().collection('users').doc(user.uid).update({
-//   name: nombre,
-// });
-

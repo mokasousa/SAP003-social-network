@@ -266,6 +266,8 @@ transition: all .4s linear;
 }
 
 .profile-name {
+  font-size: 25px;
+  font-weight: bold;
   margin: 10px;
 }
 
@@ -327,5 +329,10 @@ transition: all .4s linear;
   }
   .menu-icon{
     visibility: hidden;
+  }
+}
+
+@media only screen and (min-width: 768px){
+  .user-profile {
   }
 }
