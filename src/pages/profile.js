@@ -142,7 +142,6 @@ function Profile() {
   <main class='user-profile'>
     <div class='profile-name'> 
     ${userInfo()} 
-    ${editName()}
     </div>
     <section class='user-bio'>
       ${addBio()}
@@ -150,9 +149,6 @@ function Profile() {
     ${createBio()}
     <div class="edit-button"></div>
   </main>
-  <section id="printpost" class="print-post">
-    <ul class='post-list'></ul>
-  </section>
 `;
   return template;
 }
