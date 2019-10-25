@@ -6,3 +6,7 @@ function Input(props) {
 }
 
 export default Input;
+
+window.input = {
+  component: Input,
+}

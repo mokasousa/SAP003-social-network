@@ -1,5 +1,4 @@
 import Button from '../components/button.js';
-import Textarea from '../components/textarea.js';
 
 function logOut() {
   auth
@@ -15,7 +14,7 @@ function userInfo() {
     const username = `
   <h2>${doc.data().name}</h2>
   `;
-    document.querySelector('.profile').innerHTML = username.toUpperCase();
+    document.querySelector('.profile-name').innerHTML = username.toUpperCase();
   });
 }
 
@@ -31,8 +30,6 @@ function addBio() {
 
 function saveEditBio() {
   const user = auth.currentUser;
-  const id = db.collection('users').doc(user.uid);
-  console.log(id);
   const bioText = document.querySelector('.text-bio');
   const saveEdit = document.querySelector('.edit-textarea').value;
   bioText.innerHTML = `
@@ -55,21 +52,11 @@ function cancelEditBio() {
 }
 
 function editBio() {
-  const userId = firebase.auth().currentUser.uid;
-  console.log(userId);
-  const user = auth.currentUser;
-  db.collection('users').doc(user.uid);
-  // const userName = user.displayName;
-  // console.log(userName);
-  // console.log(userNameText);
-  // console.log(text);
-  // const userName = document.querySelector('.profile');
-  // const userNameText = userName.textContent;
   const bioText = document.querySelector('.text-bio');
   const text = bioText.textContent;
   bioText.innerHTML = `
-    <form>
-      ${window.textarea.component({
+  <form>
+    ${window.textarea.component({
     class: 'edit-textarea',
     id: 'edit-textarea',
     placeholder: 'Fale de você, seus gostos, plantas favoritas, etc. fa fa-comments',
@@ -80,7 +67,7 @@ function editBio() {
     id: 'btn-save',
     class: 'btn save-btn',
     onclick: profile.saveEditBio,
-    title: 'Salvar',
+    title: 'Publicar',
   })}
       ${window.button.component({
     id: 'btn-cancel',
@@ -90,6 +77,29 @@ function editBio() {
   })}
   `;
 }
+
+function editName() {
+  const user = auth.currentUser;
+  console.log(user);
+  // const id = db.collection('users').doc(user.uid);
+  // console.log(id);
+  const userId = firebase.auth().currentUser.uid;
+  console.log(userId);
+  const userName = user.displayName;
+  console.log(userName);
+  //
+  // userName.innerHTML = `
+  // <form>
+  //   ${window.input.component({
+  //   type: 'text',
+  //   class: 'name-input',
+  //   placeholder: 'Nome',
+  //   value: userName,
+  // })}
+  // </form>
+  // `;
+}
+
 
 function createBio() {
   const template = `
@@ -153,7 +163,10 @@ function Profile() {
     </div>
   </header>
   <main class='user-profile'>
-    <div class='profile'>${userInfo()}</div>
+    <div class='profile-name'> 
+    ${userInfo()} 
+    ${editName()}
+    </div>
     <section class='user-bio'>
       ${addBio()}
     </section>
@@ -172,11 +185,63 @@ export default Profile;
 window.profile = {
   saveEditBio,
   cancelEditBio,
-}
+};
+
+//entre l 168 e 169     <span class="edit-post fa fa-pencil"></span>
+
+//FUNÇÃO PARA EDITAR NOME
+
+// function editName() {
+//   const user = auth.currentUser;
+//   const userName = db.collection('users').doc(user.uid).get().then((doc) => {
+//     return doc.data().name;
+//   });
+//   console.log(userName);
+// }
+
+// function editName() {
+//   // const id = db.collection('users').doc(user.uid);
+//   // const userId = firebase.auth().currentUser.uid;
+//   const user = auth.currentUser;
+//   // db.collection('users').doc(user.uid);
+//   const userName = user.displayName;
+//   console.log(userName);
+//   const nameText = document.querySelector('.text-bio');
+//   const text = nameText.textContent;
+//   nameText.innerHTML = `
+//     <form>
+//     userName.innerHTML = `
+//     ${window.input.component({
+//     type: 'text',
+//     class: 'name-input',
+//     placeholder: 'Nome',
+//     value: userName,
+//   })}
+//    </form>
+//    `;
+//   </form>
+//   ${window.button.component({
+//     id: 'btn-save',
+//     class: 'btn save-btn',
+//     onclick: profile.saveEditBio,
+//     title: 'Publicar',
+//   })}
+//       ${window.button.component({
+//     id: 'btn-cancel',
+//     class: 'btn cancel-btn',
+//     onclick: profile.cancelEditBio,
+//     title: 'Cancelar',
+//   })}
+//   `;
+// }
 
 
+// document.querySelectorAll('.edit-post').forEach((btn) => {
+//   btn.addEventListener('click', (event) => {
+//     editPost(event.target.parentNode.parentNode.getAttribute('id'));
 
 
+// firebase.firestore().collection('users').doc(user.uid).update({
+//   name: nombre,
+// });
 
-// <textarea class= 'edit-textarea' id= 'edit-textarea' placeholder= 'Fale de você, seus gostos, plantas favoritas, etc.'>text</textarea>
-//   <button id= 'btn-save' onclick= saveEditBio title= 'Salvar'></button>

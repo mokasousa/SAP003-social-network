@@ -258,6 +258,37 @@ transition: all .4s linear;
   border-bottom-right-radius: 10px;
 }
 
+/*Juanita mexeu aqui*/
+
+.user-profile{
+  margin: 10px;
+  padding-top: 1%;
+}
+
+.profile-name {
+  margin: 10px;
+}
+
+.user-bio{
+  margin: 10px;
+  padding: 2px;
+  border-radius: 10px;
+  background-color: #E8E8E8;
+}
+
+.text-bio{
+  margin: 5px;
+  padding: 3px;
+}
+
+.edit-textarea{
+  width: 95%; 
+  height: 85%;
+  margin: 2px 2px;
+  padding: 5px;
+  resize: none;
+}
+
 @media only screen and (min-width: 576px){
 
   .login-page{
