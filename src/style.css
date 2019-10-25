@@ -258,40 +258,6 @@ transition: all .4s linear;
   border-bottom-right-radius: 10px;
 }
 
-/*Juanita mexeu aqui*/
-
-.user-profile{
-  margin: 10px;
-  padding-top: 1%;
-}
-
-.profile-name {
-  font-size: 25px;
-  font-weight: bold;
-  margin: 10px;
-}
-
-.user-bio{
-  margin: 10px;
-  padding: 2px;
-  border-radius: 10px;
-  background-color: #E8E8E8;
-}
-
-.text-bio{
-  margin: 5px;
-  padding: 3px;
-}
-
-.edit-textarea{
-  width: 95%; 
-  height: 85%;
-  margin: 2px 2px;
-  padding: 5px;
-  resize: none;
-}
-/*Até aqui*/
-
 @media only screen and (min-width: 576px){
 
   .login-page{
@@ -330,11 +296,5 @@ transition: all .4s linear;
   }
   .menu-icon{
     visibility: hidden;
-  }
-}
-
-/*Verificar*/
-@media only screen and (min-width: 768px){
-  .user-profile {
   }
 }
