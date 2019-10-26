@@ -38,6 +38,8 @@ No terceiro sprint implementamos a privacidade dos posts, página de perfil e ed
 
 Nossa definição de pronto foi a entrega das tarefas com o layout finalizado, o teste de usabilidade feito e código aceito na master por todas as integrantes.
 
+Este foi o resultado do Feed  
 
 
 
+<a href="https://imgflip.com/gif/3efx4t"><img src="https://i.imgflip.com/3efx4t.gif" title="made at imgflip.com"/></a>
