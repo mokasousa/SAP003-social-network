@@ -1,26 +1,23 @@
 import Button from '../components/button.js';
 import Input from '../components/input.js';
 
-
 function newUser() {
   const email = document.querySelector('.email-input').value;
   const password = document.querySelector('.password-input').value;
   const name = document.querySelector('.name-input').value;
   const errorMessageField = document.getElementById('errorMessageSignup');
-  
-  if(email.length > 0 && password.length > 0 && name.length > 0) {
-
-    auth
+  if (email.length > 0 && password.length > 0 && name.length > 0) {
+    window.auth
       .createUserWithEmailAndPassword(email, password)
-      .then(resp => {
+      .then((resp) => {
         if (resp.user) {
           resp.user.updateProfile({
-            displayName: name
+            displayName: name,
           })
             .then(() => {
-              db.collection('users').doc(resp.user.uid).set({
-                name: name,
-                biography: 'Fale de você, seus gostos, plantas favoritas, etc.'
+              window.db.collection('users').doc(resp.user.uid).set({
+                name,
+                biography: 'Fale de você, seus gostos, plantas favoritas, etc.',
               })
                 .then(() => {
                   window.location = '#login';
@@ -28,14 +25,17 @@ function newUser() {
             });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         const errorCode = error.code;
-        const errorMessage = errorCode === 'auth/invalid-email' ? 'Email inválido.' : errorCode === 'auth/weak-password' ? 'A senha deve conter 6 caracteres ou mais.' : 'Preencha os campos corretamente';
-        errorMessageField.textContent = errorMessage;
+        if (errorCode === 'auth/invalid-email') {
+          errorMessageField.textContent = 'Email inválido.';
+        } else if (errorCode === 'auth/weak-password') {
+          errorMessageField.textContent = 'A senha deve conter 6 caracteres ou mais.';
+        }
       });
   } else {
     errorMessageField.textContent = 'Preencha todos os campos para realizar seu cadastro!';
-  };
+  }
 }
 
 function Signup() {
@@ -44,19 +44,19 @@ function Signup() {
     type: 'text',
     class: 'name-input',
     placeholder: 'Nome',
-    value:''
+    value: '',
   })}
     ${Input({
     type: 'email',
     class: 'email-input',
     placeholder: 'Email',
-    value:''
+    value: '',
   })}
     ${Input({
     type: 'password',
     class: 'password-input',
     placeholder: 'Senha',
-    value:''
+    value: '',
   })}
     ${Button({
     class: 'btn btn-register btn-gray',

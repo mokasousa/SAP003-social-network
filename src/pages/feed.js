@@ -1,38 +1,51 @@
 import Button from '../components/button.js';
 import Textarea from '../components/textarea.js';
-import { AddComment, DeleteComment, PrivacyPost, EditPost, LikePost, DeletePost,} from '../posts/functions.js';
-import { UserInfo, AddBio, CreateBio } from '../posts/edit-profile.js';
-
-
+import {
+  AddComment,
+  DeleteComment,
+  PrivacyPost,
+  EditPost,
+  LikePost,
+  DeletePost,
+  GetFirstLetter,
+} from '../posts/functions.js';
+import {
+  UserInfo,
+  AddBio,
+  CreateBio,
+} from '../posts/edit-profile.js';
 
 function logOut() {
-  auth
+  window.auth
     .signOut()
     .then(() => {
       window.location = '#login';
     });
 }
- 
-// function userInfo() {
-//   const user = auth.currentUser;
-//   db
-//     .collection('users')
-//     .doc(user.uid)
-//     .get()
-//     .then((doc) => {
-//       const username = `
-//       <h4>Bem vindo(a), ${doc.data().name}!</h4>
-//     `;
-//     document.querySelector('.profile').innerHTML = username;
-//   });
-// }
+
+function printComments(arr, logged) {
+  let template = '';
+  arr.forEach((text) => {
+    template += `
+    <li class='comments-list' data-userid='${text.id}'  data-ref='${text.idComment}'>
+      <div class='letterIcon'>${GetFirstLetter(text.userName)}</div> 
+      <div class= 'comment-area'>
+      ${logged === text.id ? '<div class="delete-comment fa fa-trash"></div>' : ''}
+      <div class='user'>${text.userName}:</div>
+      <div class='text-comment'>${text.newComment}</div>
+      </div>
+    </li>
+    `;
+  });
+  return template;
+}
 
 function addPost(post, postId) {
-  const imageTemplate = `<img class='preview-picture' src='${post.image_url}'>`
-  const LoggedUserID = auth.currentUser.uid; 
-  const selectTemplate = `<select class="privacy"><option value="public" ${post.privacy === 'public' ? 'selected' : ''}>Público</option><option value="private" ${post.privacy === 'private' ? 'selected' : ''}> Privado</option></select>`
+  const imageTemplate = `<img class='preview-picture' src='${post.image_url}'>`;
+  const LoggedUserID = window.auth.currentUser.uid;
+  const selectTemplate = `<select class="privacy"><option value="public" ${post.privacy === 'public' ? 'selected' : ''}>Público</option><option value="private" ${post.privacy === 'private' ? 'selected' : ''}> Privado</option></select>`;
   const postTemplate = `
-      <li class='post' id="${postId}">
+      <li class='post' id = "${postId}">
         <p class='username'>Postado por <strong><span id='${post.user_id}'>${post.user_name}</span></strong></p> 
         <p class='date'>${post.createdAt.toDate().toLocaleString('pt-BR').substr(0, 19)}</p>
         <p class="post-text">${post.text}</p>
@@ -46,11 +59,11 @@ function addPost(post, postId) {
               ${post.likes}
             </div>
             <div class='comment-icon fa fa-comments'></div>
-            ${LoggedUserID === post.user_id  ? selectTemplate : ''}
+            ${LoggedUserID === post.user_id ? selectTemplate : ''}
           </div>
-          <div class="comments">
-            <div class="comment-container"></div>
-            ${post.comments.length > 0 ?`<p><strong>Comentários:</strong></p>`:''}
+          <div class='comments'>
+            <div class='comment-container'></div>
+            ${post.comments.length > 0 ? '<p><strong>Comentários:</strong></p>' : ''}
             <ul class='comment-posts'>${printComments(post.comments, LoggedUserID)}</ul>
           </div>
         </div>
@@ -58,17 +71,16 @@ function addPost(post, postId) {
       `;
   return postTemplate;
 }
- 
+
 function createPost() {
-  const image = document.getElementById('image-preview')
+  const image = document.getElementById('image-preview');
   const text = document.querySelector('.text-area').value;
-  const user = auth.currentUser;
-  db
+  const user = window.auth.currentUser;
+  window.db
     .collection('users')
     .doc(user.uid)
     .get()
     .then((doc) => {
-
       const post = {
         likes: 0,
         user_likes: [],
@@ -81,20 +93,16 @@ function createPost() {
         privacy: 'public',
       };
 
-      db
+      window.db
         .collection('posts')
         .add(post)
         .then();
-        
+
       document.querySelector('.text-area').value = '';
       const errorMessage = document.getElementById('messageImage');
-      errorMessage.textContent = ''
-      document.getElementById('image-preview-container').innerHTML = ''
+      errorMessage.textContent = '';
+      document.getElementById('image-preview-container').innerHTML = '';
     });
-}
-
-function GetFirstLetter(userName){
-  return userName[0]
 }
 
 function NewPostTemplate() {
@@ -111,55 +119,38 @@ function NewPostTemplate() {
       <div class="image-preview-container" id='image-preview-container'></div>
       <input type='file' class='input-photo' id='input-photo'>
       ${Button({
-        type: 'button',
-        class: 'btn btn-gray btn-post',
-        id: 'btn-post',
-        onclick: createPost,
-        title: 'Postar',
-      })}
-    </div>
-    <div class='surpriseUsers' id='surpriseUsers'>
-      <progress style='display:none;' value='0' max='100' id='uploader' class='upload-bar'>0%</progress>
-      <div id='messageImage'></div>
-    </div>
-  </div>
-  `;
+    type: 'button',
+    class: 'btn btn-gray btn-post',
+    id: 'btn-post',
+    onclick: createPost,
+    title: 'Postar',
+  })}
+</div>
+<div class='surpriseUsers' id='surpriseUsers'>
+  <progress style='display:none;' value='0' max='100' id='uploader' class='upload-bar'>0%</progress>
+  <div id='messageImage'></div>
+</div>
+</div>
+`;
   const template = `
   <div class='post-area-container'
-    <section class="input-area">
-      <form class="post-area">
-        ${postArea}
-      </form>
-    </section>
+  <section class="input-area">
+    <form class="post-area">
+      ${postArea}
+    </form>
+  </section>
   </div>
-  `;
+`;
   return template;
 }
 
-function printComments(arr, logged) {
-  let template = '';
-  arr.forEach((text) => {
-    template += `
-    <li class='comments-list' data-userid='${text.id}'  data-ref='${text.idComment}'>
-      <div class='letterIcon'>${GetFirstLetter(text.userName)}</div> 
-      <div class= 'comment-area'>
-      ${logged === text.id ? '<div class="delete-comment fa fa-trash"></div>':''}
-      <div class='user'>${text.userName}:</div>
-      <div class='text-comment'>${text.newComment}</div>
-      </div>
-    </li>
-    `;
-  });
-  return template;
-}
- 
-function checkIsProfile (profileValue, feedValue) {
-  return location.hash === '#profile' ? profileValue : feedValue;
+function checkIsProfile(profileValue, feedValue) {
+  return window.location.hash === '#profile' ? profileValue : feedValue;
 }
 
 function loadPosts() {
-  const firstQueryProp = checkIsProfile('user_id', 'privacy')
-  const secondQueryProp = checkIsProfile(firebase.auth().currentUser.uid, 'public')
+  const firstQueryProp = checkIsProfile('user_id', 'privacy');
+  const secondQueryProp = checkIsProfile(firebase.auth().currentUser.uid, 'public');
   const postsCollection = firebase.firestore().collection('posts');
   postsCollection
     .where(firstQueryProp, '==', secondQueryProp)
@@ -197,17 +188,18 @@ function loadPosts() {
       });
       document.querySelectorAll('.privacy').forEach((selection) => {
         selection.addEventListener('change', (event) => {
-          const targetOption = document.querySelector('.privacy').options[document.querySelector('.privacy').selectedIndex].value
+          const targetOption = document.querySelector('.privacy').options[document.querySelector('.privacy').selectedIndex].value;
           PrivacyPost(event.target.parentNode.parentNode.parentNode.getAttribute('id'), targetOption);
         });
       });
     });
 }
 
-function userDescription(){
-  if (checkIsProfile(false, true)) return ''
-  const template =`
-    <section class='user-profile'>
+function userDescription() {
+  if (checkIsProfile(false, true)) return '';
+  const template = `
+  <div class='bio-container'>
+  <section class='user-profile'>
         <div class='profile-name'>
         ${UserInfo()}
         </div>
@@ -216,10 +208,11 @@ function userDescription(){
         </section>
         ${CreateBio()}
         <div class='edit-button'></div>
-      </section>
+  </section>
+  </div>
       `;
-    return template;
-  }
+  return template;
+}
 
 function Feed() {
   const nameBtn = checkIsProfile('Feed', 'Meu Perfil');
@@ -230,7 +223,7 @@ function Feed() {
     class: 'btn profile-btn hide-mobile',
     id: 'btn-profile',
     onclick: () => {
-      window.location = location.hash === '#profile' ? '#feed' : '#profile'
+      window.location = window.location.hash === '#profile' ? '#feed' : '#profile';
     },
     title: nameBtn,
   })}
@@ -261,7 +254,7 @@ function Feed() {
     class: 'btn profile-btn ',
     id: 'btn-profile',
     onclick: () => {
-      window.location = location.hash === '#profile' ? '#feed' : '#profile'
+      window.location = window.location.hash === '#profile' ? '#feed' : '#profile';
     },
     title: nameBtn,
   })}
@@ -284,6 +277,3 @@ function Feed() {
 }
 
 export default Feed;
-
-
-
