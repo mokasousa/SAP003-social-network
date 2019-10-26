@@ -44,3 +44,7 @@ No segundo sprint fizemos o feed e suas funcionalidades (post, CRUD, implementa�
 No terceiro sprint implementamos a privacidade dos posts, página de perfil e edição da biografia, post de fotos e a opção de deletar um comentário feito.
 
 Nossa definição de pronto foi a entrega das tarefas com o layout finalizado, o teste de usabilidade feito e código aceito na master por todas as integrantes.
+
+Demonstração da página do Feed:
+
+<a href="https://imgflip.com/gif/3efx4t"><img src="https://i.imgflip.com/3efx4t.gif" title="made at imgflip.com"/></a>
