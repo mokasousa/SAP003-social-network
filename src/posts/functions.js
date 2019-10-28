@@ -63,11 +63,12 @@ function AddComment(postId) {
 function DeleteComment(postid) {
   if (!window.confirm('Tem certeza que deseja excluir esse comentário?')) return;
   const postDoc = window.db.collection('posts').doc(postid);
+  const ref = event.currentTarget.parentNode.parentNode.dataset.ref;
   postDoc
     .get()
     .then((d) => {
       const arrComments = d.data().comments;
-      const targetObj = arrComments.find(c => c.idComment);
+      const targetObj = arrComments.find(c => c.idComment === ref);
       postDoc.update({
         comments: firebase.firestore.FieldValue.arrayRemove(targetObj),
       });
