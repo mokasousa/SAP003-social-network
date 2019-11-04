@@ -270,7 +270,7 @@ function Feed() {
   ${userDescription()}
   ${NewPostTemplate()}
   <section id="printpost" class="print-post">
-    <ul class='post-list'>${loadPosts()}</ul>
+    <ul class='post-list'>${loadPosts() || ''}</ul>
   </section>
   `;
   return template;
