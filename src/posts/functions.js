@@ -112,6 +112,7 @@ function cancelEdit() {
 }
 
 function EditPost(postId) {
+ 
   const id = postId;
   const postText = document.getElementById(id).querySelector('.post-text');
   const button = document.getElementById(id).querySelector('.edit-button');

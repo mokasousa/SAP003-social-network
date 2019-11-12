@@ -1,7 +1,7 @@
 import Login from './pages/login.js';
 import Signup from './pages/signup.js';
-import Feed from './pages/feed.js';
-import Profile from './pages/profile.js';
+import {Feed, Profile} from './pages/feed.js';
+// import Profile from './pages/profile.js';
 
 
 function loadImage() {

@@ -1,5 +1,6 @@
-import Button from '../components/button.js';
-import Textarea from '../components/textarea.js';
+// import Button from '../components/button.js';
+// import Textarea from '../components/textarea.js';
+import PostsTemplate from '../components/posts-template.js';
 import {
   AddComment,
   DeleteComment,
@@ -14,6 +15,7 @@ import {
   AddBio,
   CreateBio,
 } from '../posts/edit-profile.js';
+
 
 function logOut() {
   window.auth
@@ -42,15 +44,17 @@ function printComments(arr, logged) {
 
 function addPost(post, postId) {
   const imageTemplate = `<img class='preview-picture' src='${post.image_url}'>`;
+  const trashAndPencilTemplatePost = `<div class="delete fa fa-trash" onclick="${() => DeletePost(postId)}"></div><div class="edit-post fa fa-pencil" onclick="${() => EditPost(postId)}"></div>`;
   const LoggedUserID = window.auth.currentUser.uid;
   const selectTemplate = `<select class="privacy"><option value="public" ${post.privacy === 'public' ? 'selected' : ''}>Público</option><option value="private" ${post.privacy === 'private' ? 'selected' : ''}> Privado</option></select>`;
+
   const postTemplate = `
-      <li class='post' id = "${postId}">
+      <li class='post' id = '${postId}'>
         <p class='username'>Postado por <strong><span id='${post.user_id}'>${post.user_name}</span></strong></p> 
         <p class='date'>${post.createdAt.toDate().toLocaleString('pt-BR').substr(0, 19)}</p>
         <p class="post-text">${post.text}</p>
         ${post.image_url ? imageTemplate : ''}
-        ${LoggedUserID === post.user_id ? '<div class="delete fa fa-trash"></div> <div><span class="edit-post fa fa-pencil"></span></div>' : ''}
+        ${LoggedUserID === post.user_id ? trashAndPencilTemplatePost : ''}
         <div class="edit-button"></div>
         <div class="post-footer">
           <div class="interaction-area">
@@ -105,52 +109,9 @@ function createPost() {
     });
 }
 
-function NewPostTemplate() {
-  const postArea = `
-  ${Textarea({
-    class: 'text-area',
-    id: 'post-text',
-    placeholder: 'No que você está pensando?',
-    value: '',
-  })}
-  <div class='footer-post'>
-    <div class = 'action'>
-      <label for='input-photo' class='fa fa-image'></label>
-      <div class="image-preview-container" id='image-preview-container'></div>
-      <input type='file' class='input-photo' id='input-photo'>
-      ${Button({
-    type: 'button',
-    class: 'btn btn-gray btn-post',
-    id: 'btn-post',
-    onclick: createPost,
-    title: 'Postar',
-  })}
-</div>
-<div class='surpriseUsers' id='surpriseUsers'>
-  <progress style='display:none;' value='0' max='100' id='uploader' class='upload-bar'>0%</progress>
-  <div id='messageImage'></div>
-</div>
-</div>
-`;
-  const template = `
-  <div class='post-area-container'
-  <section class="input-area">
-    <form class="post-area">
-      ${postArea}
-    </form>
-  </section>
-  </div>
-`;
-  return template;
-}
-
-function checkIsProfile(profileValue, feedValue) {
-  return window.location.hash === '#profile' ? profileValue : feedValue;
-}
-
-function loadPosts() {
-  const firstQueryProp = checkIsProfile('user_id', 'privacy');
-  const secondQueryProp = checkIsProfile(firebase.auth().currentUser.uid, 'public');
+function loadPosts(firstQueryProp, secondQueryProp) {
+  //const firstQueryProp = checkIsProfile('user_id', 'privacy');
+  //const secondQueryProp = checkIsProfile(firebase.auth().currentUser.uid, 'public');
   const postsCollection = firebase.firestore().collection('posts');
   postsCollection
     .where(firstQueryProp, '==', secondQueryProp)
@@ -161,11 +122,11 @@ function loadPosts() {
       snapshot.docs.forEach((post) => {
         postList.innerHTML += addPost(post.data(), post.id);
       });
-      document.querySelectorAll('.delete').forEach((btn) => {
-        btn.addEventListener('click', (event) => {
-          DeletePost(event.target.parentNode.getAttribute('id'));
-        });
-      });
+      // document.querySelectorAll('.delete').forEach((btn) => {
+      //   btn.addEventListener('click', (event) => {
+      //     DeletePost(event.target.parentNode.getAttribute('id'));
+      //   });
+      // });
       document.querySelectorAll('.delete-comment').forEach((btn) => {
         btn.addEventListener('click', (event) => {
           DeleteComment(event.currentTarget.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.getAttribute('id'));
@@ -176,11 +137,11 @@ function loadPosts() {
           LikePost(event.target.parentNode.parentNode.parentNode.parentNode.getAttribute('id'));
         });
       });
-      document.querySelectorAll('.edit-post').forEach((btn) => {
-        btn.addEventListener('click', (event) => {
-          EditPost(event.target.parentNode.parentNode.getAttribute('id'));
-        });
-      });
+      // document.querySelectorAll('.edit-post').forEach((btn) => {
+      //   btn.addEventListener('click', (event) => {
+      //     EditPost(event.target.parentNode.parentNode.getAttribute('id'));
+      //   });
+      // });
       document.querySelectorAll('.comment-icon').forEach((icon) => {
         icon.addEventListener('click', (event) => {
           AddComment(event.target.parentNode.parentNode.parentNode.getAttribute('id'));
@@ -196,7 +157,6 @@ function loadPosts() {
 }
 
 function userDescription() {
-  if (checkIsProfile(false, true)) return '';
   const template = `
   <div class='bio-container'>
   <section class='user-profile'>
@@ -215,65 +175,33 @@ function userDescription() {
 }
 
 function Feed() {
-  const nameBtn = checkIsProfile('Feed', 'Meu Perfil');
+  const props = {
+    page: () => window.location.hash = '#profile',
+    nameBtn: 'Meu Perfil',
+    logout: logOut,
+    userdescription: '',
+    createpost: createPost,
+    loadposts: loadPosts('privacy', 'public'),
+    }
   const template = `
-  <header class='header'>
-    ${Button({
-    type: 'button',
-    class: 'btn profile-btn hide-mobile',
-    id: 'btn-profile',
-    onclick: () => {
-      window.location = window.location.hash === '#profile' ? '#feed' : '#profile';
-    },
-    title: nameBtn,
-  })}
-    <div class='header-title'>
-      <label for='toggle-side-menu'>
-        <div class='fa fa-bars hide-desktop menu-icon'></div>
-      </label>
-      <p> Horta Urbana </p> 
-      <div class='header-img'>
-        <img src="./img/fruits.svg">
-      </div>
-    </div>
-    ${Button({
-    type: 'button',
-    class: 'btn logout-btn hide-mobile',
-    id: 'btn-log-out',
-    onclick: logOut,
-    title: 'Sair',
-  })}
-    <input 
-      type='checkbox'
-      id='toggle-side-menu' 
-      class='toggle-side-menu hide-desktop'
-    />
-    <div class='side-menu hide-desktop'>
-        ${Button({
-    type: 'button',
-    class: 'btn profile-btn ',
-    id: 'btn-profile',
-    onclick: () => {
-      window.location = window.location.hash === '#profile' ? '#feed' : '#profile';
-    },
-    title: nameBtn,
-  })}
-  ${Button({
-    type: 'button',
-    class: 'btn logout-btn ',
-    id: 'btn-log-out',
-    onclick: logOut,
-    title: 'Sair',
-  })}
-    </div>
-  </header>
-  ${userDescription()}
-  ${NewPostTemplate()}
-  <section id="printpost" class="print-post">
-    <ul class='post-list'>${loadPosts()}</ul>
-  </section>
-  `;
+    ${PostsTemplate(props)}
+    `;
   return template;
 }
 
-export default Feed;
+function Profile() {
+  const props = {
+    page: () => window.location.hash = '#feed',
+    nameBtn: 'Mural de Posts',
+    logout: logOut,
+    userdescription: userDescription(),
+    createpost: createPost,
+    loadposts: loadPosts('user_id', window.auth.currentUser.uid),
+    }
+  const template = `
+    ${PostsTemplate(props)}
+    `;
+  return template;
+}
+
+export {Feed, Profile};
