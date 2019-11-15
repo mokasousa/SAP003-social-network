@@ -32,26 +32,26 @@ function cancelComment() {
 
 function AddComment(postId) {
   const commentArea = `
-    ${Textarea({
+    ${window.textarea.component({
     class: 'textarea-comment edit-textarea',
     placeholder: 'Escreva um comentário',
     value: '',
   })}
     <div>
-    ${Button({
+    ${window.button.component({
     type: 'button',
     class: 'btn',
     id: 'btn-comment-cancel',
     dataId: postId,
-    onclick: cancelComment,
+    onclick: window.functions.cancelComment,
     title: 'Cancelar',
   })}
-    ${Button({
+    ${window.button.component({
     type: 'button',
     class: 'btn btn-gray',
     id: 'btn-comment-post',
     dataId: postId,
-    onclick: saveComment,
+    onclick: window.functions.saveComment,
     title: 'Postar',
   })}
 </div>
@@ -112,36 +112,34 @@ function cancelEdit() {
 }
 
 function EditPost(postId) {
- 
-  const id = postId;
-  const postText = document.getElementById(id).querySelector('.post-text');
-  const button = document.getElementById(id).querySelector('.edit-button');
-  const buttonPencil = document.getElementById(id).querySelector('.edit-post');
+  const postText = document.getElementById(postId).querySelector('.post-text');
+  const button = document.getElementById(postId).querySelector('.edit-button');
+  const buttonPencil = document.getElementById(postId).querySelector('.edit-post');
   const text = postText.textContent;
   postText.innerHTML = `
-  ${Textarea({
-    class: 'edit-textarea',
-    id: 'edit-textarea',
-    placeholder: '',
-    value: text,
-  })}
-  `;
+    ${window.textarea.component({
+      class: 'edit-textarea',
+      id: 'edit-textarea',
+      placeholder: '',
+      value: text,
+    })}
+    `;
   button.innerHTML = `
-  ${Button({
-    id: 'btn-cancel',
-    class: 'btn cancel-btn',
-    dataId: postId,
-    onclick: cancelEdit,
-    title: 'Cancelar',
-  })}
-  ${Button({
-    id: 'btn-save',
-    class: 'btn save-btn btn-gray',
-    dataId: postId,
-    onclick: saveEdit,
-    title: 'Salvar',
-  })}
-  `;
+    ${window.button.component({
+      id: 'btn-cancel',
+      class: 'btn cancel-btn',
+      dataId: postId,
+      onclick: window.functions.cancelEdit,
+      title: 'Cancelar',
+    })}
+    ${window.button.component({
+      id: 'btn-save',
+      class: 'btn save-btn btn-gray',
+      dataId: postId,
+      onclick: window.functions.saveEdit,
+      title: 'Salvar',
+    })}
+    `;
   buttonPencil.style.display = 'none';
 }
 
@@ -164,11 +162,13 @@ async function LikePost(postId) {
 
 function DeletePost(postId) {
   if (!confirm('Tem certeza que deseja excluir essa publicação?')) return;
+  console.log(postId);
   window.db
     .collection('posts')
     .doc(postId)
     .delete()
     .then();
+    console.log('sim');
 }
 
 function GetFirstLetter(userName) {
@@ -184,3 +184,10 @@ export {
   DeletePost,
   GetFirstLetter,
 };
+
+window.functions = {
+  cancelEdit,
+  saveEdit,
+  saveComment,
+  cancelComment
+}

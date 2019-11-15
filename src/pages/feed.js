@@ -28,11 +28,12 @@ function logOut() {
 function printComments(arr, logged) {
   let template = '';
   arr.forEach((text) => {
+    const deleteCommentTemplate = `<div class="delete-comment fa fa-trash" onclick="button.handleClick(event,${DeleteComment}, event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id)"></div>`
     template += `
     <li class='comments-list' data-userid='${text.id}'  data-ref='${text.idComment}'>
       <div class='letterIcon'>${GetFirstLetter(text.userName)}</div> 
       <div class= 'comment-area'>
-      ${logged === text.id ? '<div class="delete-comment fa fa-trash"></div>' : ''}
+      ${logged === text.id ? deleteCommentTemplate : ''}
       <div class='user'>${text.userName}:</div>
       <div class='text-comment'>${text.newComment}</div>
       </div>
@@ -42,27 +43,32 @@ function printComments(arr, logged) {
   return template;
 }
 
+
 function addPost(post, postId) {
+
   const imageTemplate = `<img class='preview-picture' src='${post.image_url}'>`;
-  const trashAndPencilTemplatePost = `<div class="delete fa fa-trash" onclick="${() => DeletePost(postId)}"></div><div class="edit-post fa fa-pencil" onclick="${() => EditPost(postId)}"></div>`;
+
+  const trashAndPencilTemplatePost = `<div class="delete fa fa-trash" onclick="button.handleClick(event,${DeletePost}, event.target.parentNode.id)"></div><div class="edit-post fa fa-pencil" onclick="button.handleClick(event,${EditPost}, event.target.parentNode.id)"></div>`;
+
   const LoggedUserID = window.auth.currentUser.uid;
+
   const selectTemplate = `<select class="privacy"><option value="public" ${post.privacy === 'public' ? 'selected' : ''}>Público</option><option value="private" ${post.privacy === 'private' ? 'selected' : ''}> Privado</option></select>`;
 
   const postTemplate = `
       <li class='post' id = '${postId}'>
         <p class='username'>Postado por <strong><span id='${post.user_id}'>${post.user_name}</span></strong></p> 
         <p class='date'>${post.createdAt.toDate().toLocaleString('pt-BR').substr(0, 19)}</p>
-        <p class="post-text">${post.text}</p>
         ${post.image_url ? imageTemplate : ''}
+        <p class="post-text">${post.text}</p>
         ${LoggedUserID === post.user_id ? trashAndPencilTemplatePost : ''}
         <div class="edit-button"></div>
         <div class="post-footer">
           <div class="interaction-area">
             <div>
-              <div class="like fa fa-heart"></div>
+              <div class="like fa fa-heart" onclick="button.handleClick(event,${LikePost}, event.target.parentNode.parentNode.parentNode.parentNode.id)"></div>
               ${post.likes}
             </div>
-            <div class='comment-icon fa fa-comments'></div>
+            <div class='comment-icon fa fa-comments' onclick="button.handleClick(event,${AddComment}, event.target.parentNode.parentNode.parentNode.id)"></div>
             ${LoggedUserID === post.user_id ? selectTemplate : ''}
           </div>
           <div class='comments'>
@@ -109,12 +115,12 @@ function createPost() {
     });
 }
 
-function loadPosts(firstQueryProp, secondQueryProp) {
-  //const firstQueryProp = checkIsProfile('user_id', 'privacy');
-  //const secondQueryProp = checkIsProfile(firebase.auth().currentUser.uid, 'public');
+function loadPosts(firstProp, secondProp) {
+  //const firstProp = checkIsProfile('user_id', 'privacy');
+  //const secondProp = checkIsProfile(firebase.auth().currentUser.uid, 'public');
   const postsCollection = firebase.firestore().collection('posts');
   postsCollection
-    .where(firstQueryProp, '==', secondQueryProp)
+    .where(firstProp, '==', secondProp)
     .orderBy('createdAt', 'desc')
     .onSnapshot((snapshot) => {
       const postList = document.querySelector('.post-list');
@@ -127,26 +133,26 @@ function loadPosts(firstQueryProp, secondQueryProp) {
       //     DeletePost(event.target.parentNode.getAttribute('id'));
       //   });
       // });
-      document.querySelectorAll('.delete-comment').forEach((btn) => {
-        btn.addEventListener('click', (event) => {
-          DeleteComment(event.currentTarget.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.getAttribute('id'));
-        });
-      });
-      document.querySelectorAll('.like').forEach((btn) => {
-        btn.addEventListener('click', (event) => {
-          LikePost(event.target.parentNode.parentNode.parentNode.parentNode.getAttribute('id'));
-        });
-      });
+      // document.querySelectorAll('.delete-comment').forEach((btn) => {
+      //   btn.addEventListener('click', (event) => {
+      //     DeleteComment(event.currentTarget.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.getAttribute('id'));
+      //   });
+      // });
+      // document.querySelectorAll('.like').forEach((btn) => {
+      //   btn.addEventListener('click', (event) => {
+      //     LikePost(event.target.parentNode.parentNode.parentNode.parentNode.getAttribute('id'));
+      //   });
+      // });
       // document.querySelectorAll('.edit-post').forEach((btn) => {
       //   btn.addEventListener('click', (event) => {
       //     EditPost(event.target.parentNode.parentNode.getAttribute('id'));
       //   });
       // });
-      document.querySelectorAll('.comment-icon').forEach((icon) => {
-        icon.addEventListener('click', (event) => {
-          AddComment(event.target.parentNode.parentNode.parentNode.getAttribute('id'));
-        });
-      });
+      // document.querySelectorAll('.comment-icon').forEach((icon) => {
+      //   icon.addEventListener('click', (event) => {
+      //     AddComment(event.target.parentNode.parentNode.parentNode.getAttribute('id'));
+      //   });
+      // });
       document.querySelectorAll('.privacy').forEach((selection) => {
         selection.addEventListener('change', (event) => {
           const targetOption = document.querySelector('.privacy').options[document.querySelector('.privacy').selectedIndex].value;

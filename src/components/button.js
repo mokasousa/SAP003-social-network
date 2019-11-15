@@ -6,9 +6,10 @@ function Button(props) {
 }
 
 window.button = {
-  handleClick: (event, callback) => {
+  handleClick: (event, callback, par) => {
     event.preventDefault();
-    callback();
+    callback(par);
+    
   },
   component: Button,
 };
