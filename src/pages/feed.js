@@ -9,16 +9,16 @@ import {
   LikePost,
   DeletePost,
   GetFirstLetter,
-} from '../posts/functions.js';
+} from '../database-editing/edit-posts.js';
 import {
   UserInfo,
   AddBio,
   CreateBio,
-} from '../posts/edit-profile.js';
+} from '../database-editing/edit-profile.js';
 
 
 function logOut() {
-  window.auth
+  firebase.auth()
     .signOut()
     .then(() => {
       window.location = '#login';
@@ -30,7 +30,7 @@ function printComments(arr, logged) {
   arr.forEach((text) => {
     const deleteCommentTemplate = `<div class="delete-comment fa fa-trash" onclick="button.handleClick(event,${DeleteComment}, event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id)"></div>`
     template += `
-    <li class='comments-list' data-userid='${text.id}'  data-ref='${text.idComment}'>
+    <li class='comments-list' data-userid='${text.id}'  data-ref='${text.timestamp}'>
       <div class='letterIcon'>${GetFirstLetter(text.userName)}</div> 
       <div class= 'comment-area'>
       ${logged === text.id ? deleteCommentTemplate : ''}
@@ -43,14 +43,13 @@ function printComments(arr, logged) {
   return template;
 }
 
-
 function addPost(post, postId) {
 
   const imageTemplate = `<img class='preview-picture' src='${post.image_url}'>`;
 
   const trashAndPencilTemplatePost = `<div class="delete fa fa-trash" onclick="button.handleClick(event,${DeletePost}, event.target.parentNode.id)"></div><div class="edit-post fa fa-pencil" onclick="button.handleClick(event,${EditPost}, event.target.parentNode.id)"></div>`;
 
-  const LoggedUserID = window.auth.currentUser.uid;
+  const LoggedUserID = firebase.auth().currentUser.uid;
 
   const selectTemplate = `<select class="privacy"><option value="public" ${post.privacy === 'public' ? 'selected' : ''}>Público</option><option value="private" ${post.privacy === 'private' ? 'selected' : ''}> Privado</option></select>`;
 
@@ -85,39 +84,37 @@ function addPost(post, postId) {
 function createPost() {
   const image = document.getElementById('image-preview');
   const text = document.querySelector('.text-area').value;
-  const user = window.auth.currentUser;
-  window.db
-    .collection('users')
-    .doc(user.uid)
-    .get()
-    .then((doc) => {
+  const user = firebase.auth().currentUser;
+  // firebase.firestore()
+  //   .collection('users')
+  //   .doc(user.uid)
+  //   .get()
+  //   .then((doc) => {
+  //     console.log(doc.data())
       const post = {
         likes: 0,
         user_likes: [],
         text,
         comments: [],
-        user_name: doc.data().name,
+        user_name: user.displayName,//doc.data().name,
         user_id: user.uid,
         image_url: image ? image.src : null,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         privacy: 'public',
       };
 
-      window.db
+      firebase.firestore()
         .collection('posts')
-        .add(post)
-        .then();
+        .add(post);
 
       document.querySelector('.text-area').value = '';
       const errorMessage = document.getElementById('messageImage');
       errorMessage.textContent = '';
       document.getElementById('image-preview-container').innerHTML = '';
-    });
+    // });
 }
 
 function loadPosts(firstProp, secondProp) {
-  //const firstProp = checkIsProfile('user_id', 'privacy');
-  //const secondProp = checkIsProfile(firebase.auth().currentUser.uid, 'public');
   const postsCollection = firebase.firestore().collection('posts');
   postsCollection
     .where(firstProp, '==', secondProp)
@@ -128,32 +125,7 @@ function loadPosts(firstProp, secondProp) {
       snapshot.docs.forEach((post) => {
         postList.innerHTML += addPost(post.data(), post.id);
       });
-      // document.querySelectorAll('.delete').forEach((btn) => {
-      //   btn.addEventListener('click', (event) => {
-      //     DeletePost(event.target.parentNode.getAttribute('id'));
-      //   });
-      // });
-      // document.querySelectorAll('.delete-comment').forEach((btn) => {
-      //   btn.addEventListener('click', (event) => {
-      //     DeleteComment(event.currentTarget.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.getAttribute('id'));
-      //   });
-      // });
-      // document.querySelectorAll('.like').forEach((btn) => {
-      //   btn.addEventListener('click', (event) => {
-      //     LikePost(event.target.parentNode.parentNode.parentNode.parentNode.getAttribute('id'));
-      //   });
-      // });
-      // document.querySelectorAll('.edit-post').forEach((btn) => {
-      //   btn.addEventListener('click', (event) => {
-      //     EditPost(event.target.parentNode.parentNode.getAttribute('id'));
-      //   });
-      // });
-      // document.querySelectorAll('.comment-icon').forEach((icon) => {
-      //   icon.addEventListener('click', (event) => {
-      //     AddComment(event.target.parentNode.parentNode.parentNode.getAttribute('id'));
-      //   });
-      // });
-      document.querySelectorAll('.privacy').forEach((selection) => {
+       document.querySelectorAll('.privacy').forEach((selection) => {
         selection.addEventListener('change', (event) => {
           const targetOption = document.querySelector('.privacy').options[document.querySelector('.privacy').selectedIndex].value;
           PrivacyPost(event.target.parentNode.parentNode.parentNode.getAttribute('id'), targetOption);
@@ -202,7 +174,7 @@ function Profile() {
     logout: logOut,
     userdescription: userDescription(),
     createpost: createPost,
-    loadposts: loadPosts('user_id', window.auth.currentUser.uid),
+    loadposts: loadPosts('user_id', firebase.auth().currentUser.uid),
     }
   const template = `
     ${PostsTemplate(props)}

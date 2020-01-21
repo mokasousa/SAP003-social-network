@@ -13,8 +13,7 @@ function loadImage() {
     task.on('state_changed',
       (snapshot) => {
         document.getElementById('uploader').style.display = 'block';
-        const percentage = (snapshot.bytesTransferred
-          / snapshot.totalBytes) * 100;
+        const percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         document.querySelector('.upload-bar').value = percentage;
       },
       () => {
@@ -38,6 +37,7 @@ function loadImage() {
       });
   });
 }
+
 function locationHashChanged() {
   firebase.auth().onAuthStateChanged((user) => {
     if (user) {
@@ -61,5 +61,6 @@ function locationHashChanged() {
     }
   });
 }
+
 window.addEventListener('load', locationHashChanged);
 window.addEventListener('hashchange', locationHashChanged, false);

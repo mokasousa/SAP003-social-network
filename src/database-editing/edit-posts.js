@@ -3,23 +3,28 @@ import Textarea from '../components/textarea.js';
 
 function saveComment() {
   const newComment = document.querySelector('.textarea-comment').value;
-  const idComment = newComment.replace(/\s/g, '');
+  const timestamp = firebase.firestore.FieldValue.serverTimestamp();
   const datasetid = event.target.dataset.id;
-  window.db
+  const user = firebase.auth().currentUser.uid
+  console.log(user)
+  firebase
+    .firestore()
     .collection('users')
-    .doc(window.auth.currentUser.uid)
+    .doc(user)
     .get()
     .then((doc) => {
       const userName = doc.data().name;
       const id = doc.id;
-      const docPost = window.db.collection('posts').doc(datasetid);
-      docPost
+      firebase
+        .firestore()
+        .collection('posts')
+        .doc(datasetid)
         .update({
           comments: firebase.firestore.FieldValue.arrayUnion({
             userName,
             newComment,
             id,
-            idComment,
+            timestamp,
           }),
         });
     });
@@ -36,46 +41,52 @@ function AddComment(postId) {
     class: 'textarea-comment edit-textarea',
     placeholder: 'Escreva um comentário',
     value: '',
-  })}
+    })}
     <div>
-    ${window.button.component({
-    type: 'button',
-    class: 'btn',
-    id: 'btn-comment-cancel',
-    dataId: postId,
-    onclick: window.functions.cancelComment,
-    title: 'Cancelar',
-  })}
-    ${window.button.component({
-    type: 'button',
-    class: 'btn btn-gray',
-    id: 'btn-comment-post',
-    dataId: postId,
-    onclick: window.functions.saveComment,
-    title: 'Postar',
-  })}
-</div>
-`;
+      ${window.button.component({
+      type: 'button',
+      class: 'btn',
+      id: 'btn-comment-cancel',
+      dataId: postId,
+      onclick: functions.cancelComment,
+      title: 'Cancelar',
+      })}
+      ${window.button.component({
+      type: 'button',
+      class: 'btn btn-gray',
+      id: 'btn-comment-post',
+      dataId: postId,
+      onclick: functions.saveComment,
+      title: 'Postar',
+      })}
+    </div>
+    `;
   const createSection = document.getElementById(postId).querySelector('.comment-container');
   createSection.innerHTML = `${commentArea}`;
 }
 
 function DeleteComment(postid) {
   if (!window.confirm('Tem certeza que deseja excluir esse comentário?')) return;
-  const postDoc = window.db.collection('posts').doc(postid);
-  postDoc
+  firebase
+    .firestore()
+    .collection('posts')
+    .doc(postid)
     .get()
     .then((d) => {
       const arrComments = d.data().comments;
-      const targetObj = arrComments.find(c => c.idComment);
-      postDoc.update({
-        comments: firebase.firestore.FieldValue.arrayRemove(targetObj),
-      });
+      const targetObj = arrComments.find(c => c.timestamp);
+      firebase
+        .firestore()
+        .collection('posts')
+        .doc(postid)
+        .update({
+          comments: firebase.firestore.FieldValue.arrayRemove(targetObj),
+        });
     });
 }
 
 function PrivacyPost(postId, option) {
-  const docPost = window.db.collection('posts').doc(postId);
+  const docPost = firebase.firestore().collection('posts').doc(postId);
   docPost.update({
     privacy: option,
   });
@@ -89,7 +100,8 @@ function saveEdit() {
   postText.innerHTML = `
   <p class='post-text'>${editedText}</p>
   `;
-  window.db
+  firebase
+    .firestore()
     .collection('posts')
     .doc(id)
     .update({
@@ -100,7 +112,9 @@ function saveEdit() {
 }
 
 function cancelEdit() {
+
   const id = event.target.dataset.id;
+
   const postText = document.getElementById(id).querySelector('.post-text');
   const buttonPencil = document.getElementById(id).querySelector('.edit-post');
   const text = postText.textContent.trim();
@@ -129,14 +143,14 @@ function EditPost(postId) {
       id: 'btn-cancel',
       class: 'btn cancel-btn',
       dataId: postId,
-      onclick: window.functions.cancelEdit,
+      onclick: functions.cancelEdit,
       title: 'Cancelar',
     })}
     ${window.button.component({
       id: 'btn-save',
       class: 'btn save-btn btn-gray',
       dataId: postId,
-      onclick: window.functions.saveEdit,
+      onclick: functions.saveEdit,
       title: 'Salvar',
     })}
     `;
@@ -144,17 +158,17 @@ function EditPost(postId) {
 }
 
 async function LikePost(postId) {
-  const postsCollection = window.db.collection('posts');
+  const postsCollection = firebase.firestore().collection('posts');
   const actualPost = await postsCollection.doc(postId).get();
 
   postsCollection.doc(postId).get().then((doc) => {
     const arrUsers = doc.data().user_likes;
-    const thisUser = arrUsers.includes(window.auth.currentUser.uid);
+    const thisUser = arrUsers.includes(firebase.auth().currentUser.uid);
 
     if (!thisUser) {
       postsCollection.doc(postId).update({
         likes: actualPost.data().likes + 1,
-        user_likes: firebase.firestore.FieldValue.arrayUnion(window.auth.currentUser.uid),
+        user_likes: firebase.firestore.FieldValue.arrayUnion(firebase.auth().currentUser.uid),
       });
     }
   });
@@ -162,13 +176,11 @@ async function LikePost(postId) {
 
 function DeletePost(postId) {
   if (!confirm('Tem certeza que deseja excluir essa publicação?')) return;
-  console.log(postId);
-  window.db
+  firebase
+    .firestore()
     .collection('posts')
     .doc(postId)
-    .delete()
-    .then();
-    console.log('sim');
+    .delete();
 }
 
 function GetFirstLetter(userName) {

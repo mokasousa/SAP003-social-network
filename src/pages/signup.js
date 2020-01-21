@@ -7,7 +7,7 @@ function newUser() {
   const name = document.querySelector('.name-input').value;
   const errorMessageField = document.getElementById('errorMessageSignup');
   if (email.length > 0 && password.length > 0 && name.length > 0) {
-    window.auth
+    firebase.auth()
       .createUserWithEmailAndPassword(email, password)
       .then((resp) => {
         if (resp.user) {
@@ -15,7 +15,7 @@ function newUser() {
             displayName: name,
           })
             .then(() => {
-              window.db.collection('users').doc(resp.user.uid).set({
+              firebase.firestore().collection('users').doc(resp.user.uid).set({
                 name,
                 biography: 'Fale de você, seus gostos, plantas favoritas, etc.',
               })
