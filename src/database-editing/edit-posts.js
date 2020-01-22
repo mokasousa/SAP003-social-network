@@ -3,10 +3,9 @@ import Textarea from '../components/textarea.js';
 
 function saveComment() {
   const newComment = document.querySelector('.textarea-comment').value;
-  const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+  const timestamp = new Date();
   const datasetid = event.target.dataset.id;
   const user = firebase.auth().currentUser.uid
-  console.log(user)
   firebase
     .firestore()
     .collection('users')
@@ -45,7 +44,7 @@ function AddComment(postId) {
     <div>
       ${window.button.component({
       type: 'button',
-      class: 'btn',
+      class: 'btn btn-gray',
       id: 'btn-comment-cancel',
       dataId: postId,
       onclick: functions.cancelComment,
@@ -66,6 +65,7 @@ function AddComment(postId) {
 }
 
 function DeleteComment(postid) {
+  console.log(event.target.dataset.ref, event.target.dataset.userid);
   if (!window.confirm('Tem certeza que deseja excluir esse comentário?')) return;
   firebase
     .firestore()

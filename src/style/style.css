@@ -12,34 +12,34 @@
 body {
   font-family: 'Quicksand', sans-serif;
   color: #04151F;
-  background-color: #c6e2ac;
+  background-color: #26c791;
   min-height: 100vh;
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
 }
 
+.logo-img{
+  width: 400px;
+}
+
 .btn {
   font-size: 0.9rem;
-  font-weight: bold;
   text-align: center;
   padding: 0.5em;
   margin: 1em;
-  width: 80px;
-  border-radius: 100px;
+  width: 200px;
+  border-radius: 7px;
   cursor: pointer;
 }
 
 .btn-gray {
-  background-color: #322F20;
-  color: #FCFCFC;
-  border: 2px solid #322F20;
-  transition: all .15s linear;
+  background-color: #f4edd9;
+  color: black;
+  border: 1px solid black;
 }
 
 .btn-gray:hover {
-  background-color: transparent;
-  color: #322F20;
-  border: 2px solid #322F20;
+  border: 1px solid #5271ff;
   transition: all .15s linear;
 }

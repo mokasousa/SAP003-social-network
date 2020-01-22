@@ -54,10 +54,7 @@ function PostsTemplate(props) {
         <label for='toggle-side-menu'>
           <div class='fa fa-bars hide-desktop menu-icon'></div>
         </label>
-        <p> Horta Urbana </p> 
-        <div class='header-img'>
-          <img src="./img/fruits.svg">
-        </div>
+        <img class='logo-img' src='./img/horta-urbana-logo.png'>
       </div>
       ${Button({
       type: 'button',

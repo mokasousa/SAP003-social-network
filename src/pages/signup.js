@@ -20,7 +20,7 @@ function newUser() {
                 biography: 'Fale de você, seus gostos, plantas favoritas, etc.',
               })
                 .then(() => {
-                  window.location = '#login';
+                  window.location = '#feed';
                 });
             });
         }
@@ -67,13 +67,17 @@ function Signup() {
   `;
   const template = `
     <header class="main-header">
-      <h1>Bem vindo(a)!</h1>
     </header>
     <form class="form-content-signup">
-    <img class='signup-img' src="./img/woman.png">
+    <img class='signup-img' src="./img/horta-urbana-2.png">
       <main class="register-input">
+      <img class='logo-img' src='./img/horta-urbana-logo.png'>
+        <h2>Bem vindo(a)!</h2>
         <p class="register-text">Para realizar o cadastro, preencha as informações abaixo:</p>
         ${userInfo}
+        <p>Já é membro? 
+          <a href='#login'>Faça seu login!</a>
+        </p> 
         <div id="errorMessageSignup" class="error-message"></div>
       </main>
     </form>

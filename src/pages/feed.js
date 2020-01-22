@@ -28,7 +28,7 @@ function logOut() {
 function printComments(arr, logged) {
   let template = '';
   arr.forEach((text) => {
-    const deleteCommentTemplate = `<div class="delete-comment fa fa-trash" onclick="button.handleClick(event,${DeleteComment}, event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id)"></div>`
+    const deleteCommentTemplate = `<div class="delete-comment fa fa-trash" data-userid='${text.id}'  data-ref='${text.timestamp}' onclick="button.handleClick(event,${DeleteComment}, event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id)"></div>`
     template += `
     <li class='comments-list' data-userid='${text.id}'  data-ref='${text.timestamp}'>
       <div class='letterIcon'>${GetFirstLetter(text.userName)}</div> 
@@ -42,6 +42,27 @@ function printComments(arr, logged) {
   });
   return template;
 }
+
+// function printComments(postId, logged) {
+//   firebase.firestore().collection('posts').doc(postId).collection('comments')
+//   .onSnapshot((snapshot) => {
+//   let template = '';
+//   snapshot.docs.forEach((text) => {
+//     const data = text.data()
+//     const deleteCommentTemplate = `<div class="delete-comment fa fa-trash" data-userid='${data.userId}'  data-ref='${text.id}' onclick="button.handleClick(event,${DeleteComment}, event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id)"></div>`
+//     template += `
+//     <li class='comments-list'>
+//       <div class='letterIcon'>${GetFirstLetter(data.userName)}</div> 
+//       <div class= 'comment-area'>
+//       ${logged === data.userId ? deleteCommentTemplate : ''}
+//       <div class='user'>${data.userName}:</div>
+//       <div class='text-comment'>${data.newComment}</div>
+//       </div>
+//     </li>
+//     `;
+//   });
+//   return template;
+// }
 
 function addPost(post, postId) {
 

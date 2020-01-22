@@ -82,9 +82,10 @@ function Login() {
 
   const template = `
     <article class='login-page'>
-      <img class='login-img' src='./img/logo.png'>
+      <img class='login-img' src='./img/horta-urbana.png'>
       <form class='form-content-login'>
-        <h1>Horta Urbana</h1> 
+        <img class='logo-img' src='./img/horta-urbana-logo.png'>
+        <p>Encontre amigos para trocar idéias para cultivar sua horta em casa</p>
         ${userLogin}
         <div id='errorMessage' class='error-message'></div>
         <p>Ainda não é membro? 

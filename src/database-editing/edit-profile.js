@@ -3,10 +3,11 @@ import Textarea from '../components/textarea.js'
 import { GetFirstLetter } from './edit-posts.js';
 
 
-const dbUser = () => firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid)
-
 function UserInfo() {
-  dbUser()
+  firebase
+  .firestore()
+  .collection('users')
+  .doc(firebase.auth().currentUser.uid)
   .get()
   .then((doc) => {
     const username = `
@@ -20,7 +21,10 @@ function UserInfo() {
 }
 
 function AddBio() {
-  dbUser()
+  firebase
+  .firestore()
+  .collection('users')
+  .doc(firebase.auth().currentUser.uid)
   .get()
   .then((doc) => {
     const userBiography = `
@@ -32,21 +36,29 @@ function AddBio() {
 
 async function saveEditBio() {
   const saveEdit = document.querySelector('.edit-textarea').value;
-  await dbUser().update({
-    biography: saveEdit,
-  });
+  await firebase
+        .firestore()
+        .collection('users')
+        .doc(firebase.auth().currentUser.uid)
+        .update({
+          biography: saveEdit,
+        });
   document.querySelector('.user-bio').innerHTML = '';
-  AddBio();
+  profile.AddBio();
   document.getElementById('btn-post').style.display = 'block';
 }
 
 function cancelEditBio() {
-  AddBio();
+  document.querySelector('.user-bio').innerHTML = '';
+  profile.AddBio();
   document.getElementById('btn-post').style.display = 'block';
 }
 
 function editBio() {
-  dbUser()
+  firebase
+  .firestore()
+  .collection('users')
+  .doc(firebase.auth().currentUser.uid)
   .get()
   .then((doc) => {
     document.querySelector('.user-bio').innerHTML = `
@@ -62,13 +74,13 @@ function editBio() {
       ${window.button.component({
       id: 'btn-cancel',
       class: 'btn cancel-btn',
-      onclick: cancelEditBio,
+      onclick: profile.cancelEditBio,
       title: 'Cancelar',
       })}
       ${window.button.component({
       id: 'btn-save',
       class: 'btn save-btn btn-gray',
-      onclick: saveEditBio,
+      onclick: profile.saveEditBio,
       title: 'Publicar',
       })
       }
@@ -84,7 +96,7 @@ function CreateBio() {
     type: 'button',
     class: 'btn btn-gray btn-post',
     id: 'btn-post',
-    onclick: editBio,
+    onclick: profile.editBio,
     title: 'Editar biografia',
   })}
     `;

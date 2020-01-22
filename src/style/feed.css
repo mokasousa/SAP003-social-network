@@ -4,8 +4,8 @@
 
 .profile-btn,
 .logout-btn {
-  background-color: #322F20;
-  border: 1px solid #322F20;
+  background: transparent;
+  border:none;
   color: #FCFCFC;
   width: auto !important;
 }
@@ -43,7 +43,7 @@
 
 .header {
   width: 100vw;
-  background-color: #322F20;
+  background-color: #3c2d91;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -53,9 +53,8 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  color: #FCFCFC;
-  font-size: 15px;
-  font-weight: 50px;
+  margin-bottom: 0.2em;
+  margin-left:-1em;
 }
 
 .side-menu {
@@ -76,13 +75,7 @@
   transition: all .4s linear;
 }
 
-.header-img {
-  width: 50px;
-}
 
-.header-img img {
-  width: 100%;
-}
 
 .post-area-container {
   width: 100vw;
@@ -242,7 +235,7 @@
 .like {
   padding: 5px 0px;
   font-size: 25px !important;
-  color: rgb(113, 194, 6);
+  color: #3c2d91;
   cursor: pointer;
 }
 

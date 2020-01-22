@@ -53,6 +53,10 @@
   padding: 10px;
 }
 
+.cancel-btn{
+  border: 1px solid black;
+}
+
 .edit-textarea {
   width: 95%;
   height: auto;
