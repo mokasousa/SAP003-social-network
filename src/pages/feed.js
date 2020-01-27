@@ -25,46 +25,62 @@ function logOut() {
     });
 }
 
-function printComments(arr, logged) {
-  let template = '';
-  arr.forEach((text) => {
-    const deleteCommentTemplate = `<div class="delete-comment fa fa-trash" data-userid='${text.id}'  data-ref='${text.timestamp}' onclick="button.handleClick(event,${DeleteComment}, event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id)"></div>`
-    template += `
-    <li class='comments-list' data-userid='${text.id}'  data-ref='${text.timestamp}'>
-      <div class='letterIcon'>${GetFirstLetter(text.userName)}</div> 
-      <div class= 'comment-area'>
-      ${logged === text.id ? deleteCommentTemplate : ''}
-      <div class='user'>${text.userName}:</div>
-      <div class='text-comment'>${text.newComment}</div>
-      </div>
-    </li>
-    `;
-  });
-  return template;
-}
+// const funcFirebase = async postId => 
+//   await firebase
+//     .firestore()
+//     .collection('posts')
+//     .doc(postId)
+//     .collection('comments')
 
-// function printComments(postId, logged) {
-//   firebase.firestore().collection('posts').doc(postId).collection('comments')
-//   .onSnapshot((snapshot) => {
-//   let template = '';
-//   snapshot.docs.forEach((text) => {
-//     const data = text.data()
-//     const deleteCommentTemplate = `<div class="delete-comment fa fa-trash" data-userid='${data.userId}'  data-ref='${text.id}' onclick="button.handleClick(event,${DeleteComment}, event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id)"></div>`
-//     template += `
-//     <li class='comments-list'>
-//       <div class='letterIcon'>${GetFirstLetter(data.userName)}</div> 
-//       <div class= 'comment-area'>
-//       ${logged === data.userId ? deleteCommentTemplate : ''}
-//       <div class='user'>${data.userName}:</div>
-//       <div class='text-comment'>${data.newComment}</div>
-//       </div>
-//     </li>
-//     `;
-//   });
-//   return template;
+//     const returnComment = async (postId, commentId) =>
+    
+//       await firebase
+//         .firestore()
+//         .collection('posts')
+//         .doc(postId)
+//         .collection('comments')
+//         .doc(commentId)
+//         .get(doc => doc.data())
+    
+    
+//     const teste = () => console.log("blabla")
+
+/*async*/ function printComments(postId, logged, arr) {
+   
+  // let template = ''; 
+  // const comments = await funcFirebase(postId)
+  // const x = comments.doc().onSnapshot( async comment => 
+  //   {  
+  //     console.log(postId, comment.id)
+  //   const y = await returnComment(postId, comment.id)
+  //   console.log(y)
+
+  let template =[];
+
+  arr.forEach(comment => {
+
+    const data = comment.data();
+
+    const deleteCommentTemplate = `<div class="delete-comment fa fa-trash" data-userid='${data.id}'  data-ref='${comment.id}' onclick="button.handleClick(event,${DeleteComment}, event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id)"></div>`
+    
+    template += `
+      <li class='comments-list'>
+        <div class='letterIcon'>${GetFirstLetter(data.userName)}</div> 
+        <div class= 'comment-area'>
+        ${logged === data.id ? deleteCommentTemplate : ''}
+        <div class='user'>${data.userName}:</div>
+        <div class='text-comment'>${data.newComment}</div>
+        </div>
+      </li>
+    `;
+  })
+    return template;
+}
+//   )
 // }
 
-function addPost(post, postId) {
+function addPost(post, postId, arr) {
+
 
   const imageTemplate = `<img class='preview-picture' src='${post.image_url}'>`;
 
@@ -77,7 +93,7 @@ function addPost(post, postId) {
   const postTemplate = `
       <li class='post' id = '${postId}'>
         <p class='username'>Postado por <strong><span id='${post.user_id}'>${post.user_name}</span></strong></p> 
-        <p class='date'>${post.createdAt.toDate().toLocaleString('pt-BR').substr(0, 19)}</p>
+        <!--<p class='date'>${post.createdAt.toDate().toLocaleString('pt-BR').substr(0, 19)}</p>-->
         ${post.image_url ? imageTemplate : ''}
         <p class="post-text">${post.text}</p>
         ${LoggedUserID === post.user_id ? trashAndPencilTemplatePost : ''}
@@ -93,8 +109,10 @@ function addPost(post, postId) {
           </div>
           <div class='comments'>
             <div class='comment-container'></div>
-            ${post.comments.length > 0 ? '<p><strong>Comentários:</strong></p>' : ''}
-            <ul class='comment-posts'>${printComments(post.comments, LoggedUserID)}</ul>
+        <!--${post.comments.length > 0 ? '<p><strong>Comentários:</strong></p>' : ''}-->
+            <ul class='comment-posts'>
+            ${printComments(postId, LoggedUserID, arr)}
+              </ul>
           </div>
         </div>
       </li>
@@ -136,23 +154,45 @@ function createPost() {
 }
 
 function loadPosts(firstProp, secondProp) {
-  const postsCollection = firebase.firestore().collection('posts');
-  postsCollection
-    .where(firstProp, '==', secondProp)
-    .orderBy('createdAt', 'desc')
-    .onSnapshot((snapshot) => {
-      const postList = document.querySelector('.post-list');
-      postList.innerHTML = '';
-      snapshot.docs.forEach((post) => {
-        postList.innerHTML += addPost(post.data(), post.id);
-      });
-       document.querySelectorAll('.privacy').forEach((selection) => {
-        selection.addEventListener('change', (event) => {
-          const targetOption = document.querySelector('.privacy').options[document.querySelector('.privacy').selectedIndex].value;
-          PrivacyPost(event.target.parentNode.parentNode.parentNode.getAttribute('id'), targetOption);
+
+  firebase
+  .firestore()
+  .collection('posts')
+  .where(firstProp, '==', secondProp)
+  .orderBy('createdAt', 'desc')
+  .onSnapshot((snapshot) => {
+  
+    const postList = document.querySelector('.post-list');
+
+    postList.innerHTML = '';
+
+    snapshot.docs.forEach((post) => {
+
+      firebase
+      .firestore()
+      .collection('posts')
+      .doc(post.id)
+      .collection('comments')
+      .onSnapshot((snap) => {
+
+        postList.innerHTML += addPost(post.data(), post.id, snap.docs);
+
+        //snapshot.docChanges().forEach(c => console.log(c.type, c.doc.data(), c.doc.id))
+        //console.log(snapshot.docChanges())
+        
+        document.querySelectorAll('.privacy').forEach((selection) => {
+      
+          selection.addEventListener('change', (event) => {
+            
+            const targetOption = document.querySelector('.privacy').options[document.querySelector('.privacy').selectedIndex].value;
+            
+            PrivacyPost(event.target.parentNode.parentNode.parentNode.getAttribute('id'), targetOption);
+          });
         });
-      });
-    });
+    })
+  });
+});
+
 }
 
 function userDescription() {

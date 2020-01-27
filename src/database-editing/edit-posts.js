@@ -2,9 +2,11 @@ import Button from '../components/button.js';
 import Textarea from '../components/textarea.js';
 
 function saveComment() {
+ 
   const newComment = document.querySelector('.textarea-comment').value;
   const timestamp = new Date();
   const datasetid = event.target.dataset.id;
+  //console.log(datasetid)
   const user = firebase.auth().currentUser.uid
   firebase
     .firestore()
@@ -18,15 +20,17 @@ function saveComment() {
         .firestore()
         .collection('posts')
         .doc(datasetid)
-        .update({
-          comments: firebase.firestore.FieldValue.arrayUnion({
+        .collection('comments')
+        .add({
             userName,
             newComment,
             id,
             timestamp,
-          }),
-        });
+          })
+         
     });
+
+    document.getElementById(datasetid).querySelector('.comment-container').innerHTML = '';
 }
 
 function cancelComment() {
@@ -65,27 +69,19 @@ function AddComment(postId) {
 }
 
 function DeleteComment(postid) {
-  console.log(event.target.dataset.ref, event.target.dataset.userid);
+  //console.log(event.target.dataset.ref, event.target.dataset.userid);
   if (!window.confirm('Tem certeza que deseja excluir esse comentário?')) return;
   firebase
     .firestore()
     .collection('posts')
     .doc(postid)
-    .get()
-    .then((d) => {
-      const arrComments = d.data().comments;
-      const targetObj = arrComments.find(c => c.timestamp);
-      firebase
-        .firestore()
-        .collection('posts')
-        .doc(postid)
-        .update({
-          comments: firebase.firestore.FieldValue.arrayRemove(targetObj),
-        });
-    });
+    .collection('comments')
+    .doc(event.target.dataset.ref)
+    .delete();
 }
 
 function PrivacyPost(postId, option) {
+  //console.log(option)
   const docPost = firebase.firestore().collection('posts').doc(postId);
   docPost.update({
     privacy: option,
