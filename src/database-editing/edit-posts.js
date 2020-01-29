@@ -1,12 +1,10 @@
-import Button from '../components/button.js';
-import Textarea from '../components/textarea.js';
+// import Button from '../components/button.js';
+// import Textarea from '../components/textarea.js';
 
 function saveComment() {
- 
   const newComment = document.querySelector('.textarea-comment').value;
-  const timestamp = new Date();
+  const timestamp = firebase.firestore.FieldValue.serverTimestamp();
   const datasetid = event.target.dataset.id;
-  //console.log(datasetid)
   const user = firebase.auth().currentUser.uid
   firebase
     .firestore()
@@ -69,7 +67,6 @@ function AddComment(postId) {
 }
 
 function DeleteComment(postid) {
-  //console.log(event.target.dataset.ref, event.target.dataset.userid);
   if (!window.confirm('Tem certeza que deseja excluir esse comentário?')) return;
   firebase
     .firestore()
@@ -81,7 +78,6 @@ function DeleteComment(postid) {
 }
 
 function PrivacyPost(postId, option) {
-  //console.log(option)
   const docPost = firebase.firestore().collection('posts').doc(postId);
   docPost.update({
     privacy: option,

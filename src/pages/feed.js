@@ -25,37 +25,12 @@ function logOut() {
     });
 }
 
-// const funcFirebase = async postId => 
-//   await firebase
-//     .firestore()
-//     .collection('posts')
-//     .doc(postId)
-//     .collection('comments')
 
-//     const returnComment = async (postId, commentId) =>
-    
-//       await firebase
-//         .firestore()
-//         .collection('posts')
-//         .doc(postId)
-//         .collection('comments')
-//         .doc(commentId)
-//         .get(doc => doc.data())
-    
-    
-//     const teste = () => console.log("blabla")
+function printComments(postId, logged, arr) {
 
-/*async*/ function printComments(postId, logged, arr) {
-   
-  // let template = ''; 
-  // const comments = await funcFirebase(postId)
-  // const x = comments.doc().onSnapshot( async comment => 
-  //   {  
-  //     console.log(postId, comment.id)
-  //   const y = await returnComment(postId, comment.id)
-  //   console.log(y)
+  const commentsList = document.querySelector(`.comments-post-${postId}`);
 
-  let template =[];
+  commentsList.innerHTML = '';
 
   arr.forEach(comment => {
 
@@ -63,7 +38,7 @@ function logOut() {
 
     const deleteCommentTemplate = `<div class="delete-comment fa fa-trash" data-userid='${data.id}'  data-ref='${comment.id}' onclick="button.handleClick(event,${DeleteComment}, event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id)"></div>`
     
-    template += `
+    commentsList.innerHTML += `
       <li class='comments-list'>
         <div class='letterIcon'>${GetFirstLetter(data.userName)}</div> 
         <div class= 'comment-area'>
@@ -74,13 +49,9 @@ function logOut() {
       </li>
     `;
   })
-    return template;
 }
-//   )
-// }
 
-function addPost(post, postId, arr) {
-
+function addPost(post, postId) {
 
   const imageTemplate = `<img class='preview-picture' src='${post.image_url}'>`;
 
@@ -93,7 +64,7 @@ function addPost(post, postId, arr) {
   const postTemplate = `
       <li class='post' id = '${postId}'>
         <p class='username'>Postado por <strong><span id='${post.user_id}'>${post.user_name}</span></strong></p> 
-        <!--<p class='date'>${post.createdAt.toDate().toLocaleString('pt-BR').substr(0, 19)}</p>-->
+        <p class='date'>${post.createdAt.toDate().toLocaleString('pt-BR').substr(0, 19)}</p>
         ${post.image_url ? imageTemplate : ''}
         <p class="post-text">${post.text}</p>
         ${LoggedUserID === post.user_id ? trashAndPencilTemplatePost : ''}
@@ -110,13 +81,22 @@ function addPost(post, postId, arr) {
           <div class='comments'>
             <div class='comment-container'></div>
         <!--${post.comments.length > 0 ? '<p><strong>Comentários:</strong></p>' : ''}-->
-            <ul class='comment-posts'>
-            ${printComments(postId, LoggedUserID, arr)}
-              </ul>
+            <ul class='comments-post-${postId}'>
+            
+            </ul>
           </div>
         </div>
       </li>
       `;
+
+      firebase
+       .firestore()
+       .collection('posts')
+       .doc(postId)
+       .collection('comments')
+       .orderBy('timestamp', 'asc')
+       .onSnapshot((snap) => {printComments(postId, LoggedUserID, snap.docs)})
+    
   return postTemplate;
 }
 
@@ -124,33 +104,35 @@ function createPost() {
   const image = document.getElementById('image-preview');
   const text = document.querySelector('.text-area').value;
   const user = firebase.auth().currentUser;
-  // firebase.firestore()
-  //   .collection('users')
-  //   .doc(user.uid)
-  //   .get()
-  //   .then((doc) => {
-  //     console.log(doc.data())
+  firebase
+  .firestore()
+  .collection('users')
+  .doc(user.uid)
+  .get()
+  .then((doc) => {
+      console.log(doc.data())
       const post = {
         likes: 0,
         user_likes: [],
         text,
         comments: [],
-        user_name: user.displayName,//doc.data().name,
+        user_name: doc.data().name,
         user_id: user.uid,
         image_url: image ? image.src : null,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         privacy: 'public',
       };
 
-      firebase.firestore()
-        .collection('posts')
-        .add(post);
+      firebase
+      .firestore()
+      .collection('posts')
+      .add(post);
 
       document.querySelector('.text-area').value = '';
       const errorMessage = document.getElementById('messageImage');
       errorMessage.textContent = '';
       document.getElementById('image-preview-container').innerHTML = '';
-    // });
+  });
 }
 
 function loadPosts(firstProp, secondProp) {
@@ -168,14 +150,15 @@ function loadPosts(firstProp, secondProp) {
 
     snapshot.docs.forEach((post) => {
 
-      firebase
-      .firestore()
-      .collection('posts')
-      .doc(post.id)
-      .collection('comments')
-      .onSnapshot((snap) => {
+      // firebase
+      // .firestore()
+      // .collection('posts')
+      // .doc(post.id)
+      // .collection('comments')
+      // .onSnapshot((snap) => {
+        //snap.docs
 
-        postList.innerHTML += addPost(post.data(), post.id, snap.docs);
+        postList.innerHTML += addPost(post.data(), post.id);
 
         //snapshot.docChanges().forEach(c => console.log(c.type, c.doc.data(), c.doc.id))
         //console.log(snapshot.docChanges())
@@ -189,7 +172,7 @@ function loadPosts(firstProp, secondProp) {
             PrivacyPost(event.target.parentNode.parentNode.parentNode.getAttribute('id'), targetOption);
           });
         });
-    })
+    //})
   });
 });
 
