@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "sap003-social-network-squad1g2"
+    "default": "social-network-a0b11",
+    "social-network": "social-network-a0b11"
   }
 }
