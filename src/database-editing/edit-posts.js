@@ -1,6 +1,3 @@
-// import Button from '../components/button.js';
-// import Textarea from '../components/textarea.js';
-
 function saveComment() {
   const newComment = document.querySelector('.textarea-comment').value;
   const timestamp = firebase.firestore.FieldValue.serverTimestamp();
@@ -24,11 +21,10 @@ function saveComment() {
             newComment,
             id,
             timestamp,
-          })
-         
+          }) 
     });
 
-    document.getElementById(datasetid).querySelector('.comment-container').innerHTML = '';
+  document.getElementById(datasetid).querySelector('.comment-container').innerHTML = '';
 }
 
 function cancelComment() {
@@ -104,9 +100,7 @@ function saveEdit() {
 }
 
 function cancelEdit() {
-
   const id = event.target.dataset.id;
-
   const postText = document.getElementById(id).querySelector('.post-text');
   const buttonPencil = document.getElementById(id).querySelector('.edit-post');
   const text = postText.textContent.trim();

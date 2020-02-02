@@ -1,45 +1,6 @@
 import Button from './button.js';
 import Textarea from './textarea.js';
 
-// function newPostTemplate() {
-//   const postArea = `
-//   ${Textarea({
-//     class: 'text-area',
-//     id: 'post-text',
-//     placeholder: 'No que você está pensando?',
-//     value: '',
-//   })}
-//   <div class='footer-post'>
-//     <div class = 'action'>
-//       <label for='input-photo' class='fa fa-image'></label>
-//       <div class="image-preview-container" id='image-preview-container'></div>
-//       <input type='file' class='input-photo' id='input-photo'>
-//       ${Button({
-//     type: 'button',
-//     class: 'btn btn-gray btn-post',
-//     id: 'btn-post',
-//     onclick: props.createPost,
-//     title: 'Postar',
-//   })}
-//   </div>
-//   <div class='surpriseUsers' id='surpriseUsers'>
-//     <progress style='display:none;' value='0' max='100' id='uploader' class='upload-bar'>0%</progress>
-//     <div id='messageImage'></div>
-//   </div>
-//   </div>
-//   `;
-//   const template = `
-//   <div class='post-area-container'
-//   <section class="input-area">
-//     <form class="post-area">
-//       ${postArea}
-//     </form>
-//   </section>
-//   </div>
-// `;
-//   return template;
-// }
-
 function PostsTemplate(props) {
   const template = `
     <header class='header'>
@@ -121,6 +82,6 @@ function PostsTemplate(props) {
     </section>
     `;
   return template;
-  }
+}
   
   export default PostsTemplate;
