@@ -10,18 +10,19 @@ A rede social **Horta Urbana** foi desenvolvida para promover a interação entr
 
 Ao definir o tema do projeto, definimos em equipe a seguinte persona para ajudar a definir o conteúdo e valor da rede social Horta Urbana.
 
-` Nome: Bárbara
-  Profissão:  Estudante de Engenharia Ambiental
-  Idade: 25 anos
-  Genêro: Feminino
-  Mídias: Instagram, WhatsApp e LinkedIn
+>Nome: Bárbara
+>Profissão:  Estudante de Engenharia Ambiental
+>Idade: 25 anos
+>Genêro: Feminino
+>Mídias: Instagram, WhatsApp e LinkedIn
+>
+>Objetivos: 
+>Bárbara tem como objetivo compartilhar conhecimentos adquiridos na faculdade e impactar positivamente as metrópoles, que são as áreas mais afetadas devido as poucas áreas verdes e excesso de agrotóxicos nos alimentos. Também gostaria construir e adquirir conhecimentos de como cuidar de uma horta e assim obter seus próprios alimentos (orgânicos) e ter uma alimentação mais saúdavel. 
+>
+>Desafios: 
+>Se conectar com pessoas com os mesmos interesses e ter um espaço que proporcione o intercâmbio de informações, idéias e a permuta de sementes e mudas.
+>
 
-  Objetivos: 
-  Bárbara tem como objetivo compartilhar conhecimentos adquiridos na faculdade e impactar positivamente as metrópoles, que são     as áreas mais afetadas devido as poucas áreas verdes e excesso de agrotóxicos nos alimentos. Também gostaria construir e         adquirir conhecimentos de como cuidar de uma horta e assim obter seus próprios alimentos (orgânicos) e ter uma alimentação       mais saúdavel. 
-  
-  Desafios: 
-  Se conectar com pessoas com os mesmos interesses e ter um espaço que proporcione o intercâmbio de informações, idéias e a       permuta de sementes e mudas.`
-  
 Como esta Rede Social pode ajudá-la? Com a **Horta Urbana** é possível compartilhar como dar início a hortas caseiras para quem ainda não começou e dicas para os que já estão familiarizados com esses hábitos! 
 
 ### Histórias de Usuário
@@ -30,11 +31,11 @@ Esta aplicação é uma Rede Social onde o usuário pode ingressar criando uma c
 
 As funcionalidades foram designadas com as seguintes demandas do usuário:
 
-- Como usuário novo devo poder: 
+Como usuário novo devo poder: 
 * criar uma conta com email e senha válidos para poder iniciar uma sessão e ingressar na Rede Social;
 * ter a opção de iniciar sessão com uma conta Google para ingressar na Rede Social sem necessidade de criar uma conta de email válido.
     
-- Como usuário logado devo poder:
+Como usuário logado devo poder:
 * criar, guardar, deletar, editar _in place_ as postagens privadas ou públicas;
 * ver todas as postagens públicas, e todas as postagens pessoais privadas, criadas até o momento, das mais recentes para as mais antigas;
 * trocar a configuração de privacidade das postagens pessoais;
