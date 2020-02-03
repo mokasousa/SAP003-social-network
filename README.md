@@ -8,13 +8,9 @@ A rede social **Horta Urbana** foi desenvolvida para promover a interação entr
 
 ### Personas
 
-Ao definir o tema do projeto, definimos em equipe a seguinte persona para ajudar a definir o conteúdo e valor da rede social Horta Urbana.
+Ao definir o tema do projeto, definimos em equipe a seguinte persona para ajudar a definir o conteúdo e valor da rede social Horta Urbana:
 
->Nome: Bárbara
->Profissão:  Estudante de Engenharia Ambiental
->Idade: 25 anos
->Genêro: Feminino
->Mídias: Instagram, WhatsApp e LinkedIn
+>Bárbara, estudante de Engenharia Ambiental, 25 anos (usa Instagram, WhatsApp e LinkedIn)
 >
 >Objetivos: 
 >Bárbara tem como objetivo compartilhar conhecimentos adquiridos na faculdade e impactar positivamente as metrópoles, que são as áreas mais afetadas devido as poucas áreas verdes e excesso de agrotóxicos nos alimentos. Também gostaria construir e adquirir conhecimentos de como cuidar de uma horta e assim obter seus próprios alimentos (orgânicos) e ter uma alimentação mais saúdavel. 
