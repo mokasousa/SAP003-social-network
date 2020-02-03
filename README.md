@@ -2,7 +2,7 @@
 
 ## Resumo do projeto
 
-A rede social **Horta Urbana** foi desenvolvida para promover a interação entre pessoas que estejam interessadas em compartilhar informações sobre hortas e pequenos plantios em espaços urbanos. É uma _Single Page Application_ resposiva para todas interfaces que utiliza o [Firebase](https://firebase.google.com/docs/database) como banco de dados.
+A rede social **Horta Urbana** foi desenvolvida para promover a interação entre pessoas que estejam interessadas em compartilhar informações sobre hortas e pequenos plantios em espaços urbanos. É uma _Single Page Application_ responsiva para todas interfaces que utiliza o [Firebase](https://firebase.google.com/docs/database) como banco de dados.
 
 ## Desenvolvimento do Projeto
 
