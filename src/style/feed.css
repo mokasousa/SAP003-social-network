@@ -1,5 +1,6 @@
 .menu-icon {
   margin: 0px 15px 0px 15px;
+  color: #FCFCFC;
 }
 
 .profile-btn,
@@ -76,6 +77,9 @@
 }
 
 
+.logo-img-header{
+  width: 17em;
+}
 
 .post-area-container {
   width: 100vw;
@@ -328,6 +332,10 @@
 }
 
 @media only screen and (min-width: 576px) {
+  .logo-img-header{
+    width: 400px;
+  }
+
   .header-title {
     font-size: 30px;
   }
