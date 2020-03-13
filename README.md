@@ -1,5 +1,8 @@
 # Horta Urbana - Rede Social 
 
+
+![Horta Urbana Mobile Gif](https://raw.githubusercontent.com/mokasousa/social-network/master/src/img/GIF%20horta%20urbana.gif)
+
 ## Resumo do projeto
 
 A rede social **Horta Urbana** foi desenvolvida para promover a interação entre pessoas que estejam interessadas em compartilhar informações sobre hortas e pequenos plantios em espaços urbanos. É uma _Single Page Application_ responsiva para todas interfaces que utiliza o [Firebase](https://firebase.google.com/docs/database) como banco de dados.
